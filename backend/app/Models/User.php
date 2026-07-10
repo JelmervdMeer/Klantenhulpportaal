@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
@@ -29,4 +30,24 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function tickets(): HasMany
+{
+    return $this->hasMany(Ticket::class);
+}
+
+public function assignedTickets(): HasMany
+{
+    return $this->hasMany(Ticket::class, 'assigned_to');
+}
+
+public function reactions(): HasMany
+{
+    return $this->hasMany(Reaction::class);
+}
+
+public function notes(): HasMany
+{
+    return $this->hasMany(Note::class);
+}
 }
