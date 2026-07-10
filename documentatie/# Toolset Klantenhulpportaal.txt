@@ -1,0 +1,50 @@
+# Toolset Klantenhulpportaal
+
+## Backend
+
+| Tool | Gebruik |
+|---|---|
+| Laravel | Backend framework |
+| PHP | Programmeertaal backend |
+| Laravel Eloquent | Database communicatie |
+| Laravel API | REST API endpoints |
+| MySQL | Database |
+
+## Frontend
+
+| Tool | Gebruik |
+|---|---|
+| Vue 3 | Frontend framework |
+| TypeScript | Type veiligheid |
+| Vue Router | Pagina navigatie |
+| Axios | API communicatie |
+| Bootstrap 5 | Styling |
+
+## Development tools
+
+| Tool | Gebruik |
+|---|---|
+| Visual Studio Code | Code editor |
+| Git | Versiebeheer |
+| GitHub | Repository |
+| Composer | PHP packages |
+| npm | JavaScript packages |
+| dbdiagram.io | Database ontwerp |
+| Postman | API testen |
+
+## Architectuur
+
+De applicatie gebruikt een gescheiden frontend en backend.
+
+Frontend:
+- Vue 3
+- TypeScript
+- Axios
+- Vue Router
+
+Backend:
+- Laravel
+- REST API
+- MySQL database
+
+De communicatie tussen frontend en backend verloopt via API requests.
