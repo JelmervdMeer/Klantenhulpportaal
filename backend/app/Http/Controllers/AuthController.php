@@ -45,9 +45,11 @@ class AuthController extends Controller
         )->first();
 
         if (!$user || !Hash::check($validated['password'], $user->password)) {
+
             return response()->json([
                 'message' => 'Ongeldige gegevens'
             ], 401);
+
         }
 
         $token = $user->createToken('api-token')->plainTextToken;
@@ -61,9 +63,11 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        $request->user()
-            ->currentAccessToken()
-            ->delete();
+        $token = $request->user()->currentAccessToken();
+
+        if ($token) {
+            $token->delete();
+        }
 
         return response()->json([
             'message' => 'Succesvol uitgelogd'

@@ -15,6 +15,7 @@ export const useAuthStore = defineStore('auth', {
         token: localStorage.getItem('token') || null
     }),
 
+
     actions: {
 
         async login(email: string, password: string) {
@@ -37,6 +38,21 @@ export const useAuthStore = defineStore('auth', {
             api.defaults.headers.common[
                 'Authorization'
             ] = `Bearer ${response.data.token}`
+        },
+
+
+        async logout() {
+
+            await api.post('/logout')
+
+            this.user = null
+            this.token = null
+
+            localStorage.removeItem('token')
+
+            delete api.defaults.headers.common[
+                'Authorization'
+            ]
         }
 
     }
