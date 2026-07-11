@@ -1,0 +1,26 @@
+### Register nieuwe gebruiker
+POST http://127.0.0.1:8000/api/register
+Content-Type: application/json
+
+{
+    "name": "Jan Test",
+    "email": "jan@test.nl",
+    "password": "password123"
+}
+
+### Login
+POST http://127.0.0.1:8000/api/login
+Content-Type: application/json
+
+{
+    "email": "jan@test.nl",
+    "password": "password123"
+}
+
+### Huidige gebruiker
+GET http://127.0.0.1:8000/api/user
+Authorization: Bearer 2|zAaNj3rIUg9AeyMAqrQ5c6DZxaQ1sDN6PW2U3QKEbeb15ba9
+
+### Logout
+POST http://127.0.0.1:8000/api/logout
+Authorization: Bearer 2|zAaNj3rIUg9AeyMAqrQ5c6DZxaQ1sDN6PW2U3QKEbeb15ba9
