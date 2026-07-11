@@ -36,4 +36,36 @@ class TicketController extends Controller
             'tickets' => $tickets
         ]);
     }
+
+
+
+    public function show(Request $request, Ticket $ticket)
+    {
+        $user = $request->user();
+
+
+        // Alleen eigen tickets bekijken voor normale gebruikers
+        if (
+            $user->role !== 'admin' &&
+            $ticket->user_id !== $user->id
+        ) {
+            return response()->json([
+                'message' => 'Geen toegang tot dit ticket.'
+            ], 403);
+        }
+
+
+        $ticket->load([
+            'user',
+            'category',
+            'assignedAdmin',
+            'reactions.user',
+            'notes.user'
+        ]);
+
+
+        return response()->json([
+            'ticket' => $ticket
+        ]);
+    }
 }

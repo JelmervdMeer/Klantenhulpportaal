@@ -43,5 +43,10 @@ Route::middleware('auth:sanctum')->group(function () {
         'index'
     ]);
 
+    Route::get('/tickets/{ticket}', [
+    TicketController::class,
+    'show'
+]);
+
 });
 
