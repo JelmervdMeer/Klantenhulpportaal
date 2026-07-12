@@ -105,6 +105,35 @@ async function saveUser() {
 
 }
 
+async function deleteUser(id: number) {
+
+    if (!confirm('Weet je zeker dat je deze gebruiker wilt verwijderen?')) {
+        return
+    }
+
+
+    try {
+
+        await api.delete(
+            `/users/${id}`
+        )
+
+
+        message.value =
+            'Gebruiker succesvol verwijderd.'
+
+
+        await loadUsers()
+
+
+    } catch {
+
+        error.value =
+            'Gebruiker kon niet worden verwijderd.'
+
+    }
+
+}
 onMounted(loadUsers)
 
 </script>
@@ -230,12 +259,27 @@ onMounted(loadUsers)
                     
                     <td>
 
+   
+
+    
+
     <button
-        class="btn btn-warning btn-sm"
+        class="btn btn-warning btn-sm me-2"
         @click="editUser(user)"
     >
         Bewerken
     </button>
+                    
+
+
+    <button
+        class="btn btn-danger btn-sm"
+        @click="deleteUser(user.id)"
+    >
+        Verwijderen
+    </button>
+
+
 
 </td>
 
