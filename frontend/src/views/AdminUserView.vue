@@ -21,6 +21,20 @@ const loading = ref(true)
 
 const error = ref('')
 
+const message = ref('')
+
+const editingUser = ref<User | null>(null)
+
+const form = ref({
+
+    name: '',
+
+    email: '',
+
+    role: 'user'
+
+})
+
 async function loadUsers() {
 
     try {
@@ -36,6 +50,56 @@ async function loadUsers() {
     } finally {
 
         loading.value = false
+
+    }
+
+}
+
+function editUser(user: User) {
+
+    editingUser.value = user
+
+    form.value = {
+
+        name: user.name,
+
+        email: user.email,
+
+        role: user.role
+
+    }
+
+}
+
+async function saveUser() {
+
+    if (!editingUser.value) {
+        return
+    }
+
+
+    try {
+
+        await api.put(
+            `/users/${editingUser.value.id}`,
+            form.value
+        )
+
+
+        message.value =
+            'Gebruiker succesvol bijgewerkt.'
+
+
+        editingUser.value = null
+
+
+        await loadUsers()
+
+
+    } catch {
+
+        error.value =
+            'Gebruiker kon niet worden bijgewerkt.'
 
     }
 
@@ -66,6 +130,71 @@ onMounted(loadUsers)
             {{ error }}
         </div>
 
+        <div
+    v-if="message"
+    class="alert alert-success"
+>
+    {{ message }}
+</div>
+
+        <div
+    v-if="editingUser"
+    class="card mb-4"
+>
+
+    <div class="card-header">
+
+        Gebruiker bewerken
+
+    </div>
+
+    <div class="card-body">
+
+        <input
+            v-model="form.name"
+            class="form-control mb-3"
+            placeholder="Naam"
+        >
+
+        <input
+            v-model="form.email"
+            class="form-control mb-3"
+            placeholder="E-mail"
+        >
+
+        <select
+            v-model="form.role"
+            class="form-select mb-3"
+        >
+
+            <option value="user">
+                Gebruiker
+            </option>
+
+            <option value="admin">
+                Administrator
+            </option>
+
+        </select>
+
+       <button
+    class="btn btn-primary"
+    @click="saveUser"
+>
+    Opslaan
+</button>
+
+        <button
+            class="btn btn-secondary ms-2"
+            @click="editingUser = null"
+        >
+            Annuleren
+        </button>
+
+    </div>
+
+</div>
+
         <table
             v-if="users.length"
             class="table table-striped"
@@ -79,6 +208,7 @@ onMounted(loadUsers)
                     <th>Naam</th>
                     <th>E-mail</th>
                     <th>Rol</th>
+                    <th>Acties</th>>
 
                 </tr>
 
@@ -97,7 +227,17 @@ onMounted(loadUsers)
 
                     <td>{{ user.email }}</td>
 
-                    <td>{{ user.role }}</td>
+                    
+                    <td>
+
+    <button
+        class="btn btn-warning btn-sm"
+        @click="editUser(user)"
+    >
+        Bewerken
+    </button>
+
+</td>
 
                 </tr>
 
