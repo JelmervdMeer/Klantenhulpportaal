@@ -50,6 +50,13 @@ const router = createRouter({
     path: '/tickets/create',
     name: 'ticket-create',
     component: CreateTicketView
+},
+
+{
+    path: '/admin/categories',
+    name: 'admin-categories',
+    component: () =>
+        import('../views/AdminCategoriesView.vue')
 }
 
     ]

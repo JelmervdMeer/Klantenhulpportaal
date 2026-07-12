@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\UserController;
 
 
 Route::post('/register', [
@@ -49,10 +50,19 @@ Route::middleware('auth:sanctum')->group(function () {
     'show'
 ]);
 
+Route::put('/tickets/{ticket}/status', [
+    TicketController::class,
+    'updateStatus'
+]);
 Route::get('/tickets', [
     TicketController::class,
     'index'
 ]);
+
+Route::put(
+    'tickets/{ticket}/priority',
+    [TicketController::class, 'updatePriority']
+);
 
 Route::get('/tickets/{ticket}', [
     TicketController::class,
@@ -73,6 +83,21 @@ Route::get('/categories', [
     CategoryController::class,
     'index'
 ]);
+
+Route::get('/admins', [UserController::class, 'admins']);
+
+Route::put(
+    'tickets/{ticket}/assign',
+    [TicketController::class, 'assign']
+);
+
+Route::get('/categories', [CategoryController::class, 'index']);
+
+Route::post('/categories', [CategoryController::class, 'store']);
+
+Route::put('/categories/{category}', [CategoryController::class, 'update']);
+
+Route::delete('/categories/{category}', [CategoryController::class, 'destroy']);
 
 });
 
