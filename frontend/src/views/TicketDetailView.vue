@@ -62,14 +62,62 @@
                         {{ ticket.description }}
                     </p>
 
+                </div>
+
+            </div>
+
+
+            <div
+                v-if="ticket.reactions?.length"
+                class="card mt-4"
+            >
+
+                <div class="card-header">
+
+                    <h4 class="mb-0">
+                        Reacties
+                    </h4>
+
+                </div>
+
+
+                <div class="card-body">
+
+                    <div
+                        v-for="reaction in ticket.reactions"
+                        :key="reaction.id"
+                        class="border-bottom mb-3 pb-3"
+                    >
+
+                        <strong>
+                            {{ reaction.user?.name }}
+                        </strong>
+
+                        <br>
+
+                        <small class="text-muted">
+                            {{ reaction.created_at }}
+                        </small>
+
+                        <p class="mt-2">
+                            {{ reaction.message }}
+                        </p>
+
+                    </div>
 
                 </div>
 
             </div>
 
 
-        </div>
+            <div
+                v-else
+                class="alert alert-secondary mt-4"
+            >
+                Er zijn nog geen reacties op dit ticket.
+            </div>
 
+        </div>
 
     </div>
 
@@ -83,43 +131,41 @@ import { useRoute } from 'vue-router'
 
 import api from '../api/axios'
 
-
 interface Ticket {
 
     id: number
-
     title: string
-
     description: string
-
     status: string
-
     priority: string
-
 
     category?: {
         name: string
     }
 
-
     user?: {
         name: string
     }
 
-}
+    reactions?: {
+        id: number
+        message: string
+        created_at: string
 
+        user?: {
+            name: string
+        }
+    }[]
+
+}
 
 const route = useRoute()
 
-
 const ticket = ref<Ticket | null>(null)
-
 
 const loading = ref(true)
 
-
 const error = ref('')
-
 
 
 async function loadTicket() {
@@ -130,9 +176,7 @@ async function loadTicket() {
             `/tickets/${route.params.id}`
         )
 
-
         ticket.value = response.data.ticket
-
 
     } catch {
 
@@ -145,8 +189,6 @@ async function loadTicket() {
     }
 
 }
-
-
 
 onMounted(loadTicket)
 

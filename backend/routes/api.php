@@ -48,5 +48,20 @@ Route::middleware('auth:sanctum')->group(function () {
     'show'
 ]);
 
+Route::get('/tickets', [
+    TicketController::class,
+    'index'
+]);
+
+Route::get('/tickets/{ticket}', [
+    TicketController::class,
+    'show'
+]);
+
+Route::post('/tickets/{ticket}/reactions', [
+    TicketController::class,
+    'storeReaction'
+]);
+
 });
 

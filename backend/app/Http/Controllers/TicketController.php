@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Ticket;
 use Illuminate\Http\Request;
+use App\Models\Reaction;
 
 class TicketController extends Controller
 {
@@ -68,4 +69,24 @@ class TicketController extends Controller
             'ticket' => $ticket
         ]);
     }
+
+    public function storeReaction(Request $request, Ticket $ticket)
+{
+    $validated = $request->validate([
+        'message' => 'required|string'
+    ]);
+
+    $reaction = Reaction::create([
+        'message' => $validated['message'],
+        'ticket_id' => $ticket->id,
+        'user_id' => $request->user()->id,
+    ]);
+
+    $reaction->load('user');
+
+    return response()->json([
+        'message' => 'Reactie toegevoegd.',
+        'reaction' => $reaction
+    ], 201);
+}
 }
