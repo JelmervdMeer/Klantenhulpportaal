@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\NoteController;
 
 
 Route::post('/register', [
@@ -98,6 +99,37 @@ Route::post('/categories', [CategoryController::class, 'store']);
 Route::put('/categories/{category}', [CategoryController::class, 'update']);
 
 Route::delete('/categories/{category}', [CategoryController::class, 'destroy']);
+
+Route::get(
+    '/tickets/{ticket}/notes',
+    [NoteController::class, 'index']
+);
+
+
+Route::post(
+    '/tickets/{ticket}/notes',
+    [NoteController::class, 'store']
+);
+
+
+Route::put(
+    '/notes/{note}',
+    [NoteController::class, 'update']
+);
+
+
+Route::delete(
+    '/notes/{note}',
+    [NoteController::class, 'destroy']
+);
+
+Route::get('/users', [UserController::class, 'index']);
+
+Route::put('/users/{user}', [UserController::class, 'update']);
+
+Route::delete('/users/{user}', [UserController::class, 'destroy']);
+
+
 
 });
 

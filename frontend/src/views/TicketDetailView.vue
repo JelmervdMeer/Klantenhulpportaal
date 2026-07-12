@@ -263,6 +263,99 @@
 
             </div>
 
+            <div
+    v-if="authStore.user?.role === 'admin'"
+    class="card mt-4"
+>
+
+    <div class="card-header">
+
+        <h4 class="mb-0">
+            Interne notities
+        </h4>
+
+    </div>
+
+
+
+    <div class="card-body">
+
+
+        <div
+            v-if="noteMessage"
+            class="alert alert-success"
+        >
+            {{ noteMessage }}
+        </div>
+
+
+
+        <div
+            v-if="noteError"
+            class="alert alert-danger"
+        >
+            {{ noteError }}
+        </div>
+
+
+
+        <div
+            v-for="note in notes"
+            :key="note.id"
+            class="border-bottom mb-3 pb-3"
+        >
+
+            <strong>
+                {{ note.user?.name }}
+            </strong>
+
+            <small class="text-muted ms-2">
+                {{ note.created_at }}
+            </small>
+
+
+            <p class="mt-2">
+                {{ note.note }}
+            </p>
+
+
+            <button
+                class="btn btn-danger btn-sm"
+                @click="deleteNote(note.id)"
+            >
+                Verwijderen
+            </button>
+
+
+        </div>
+
+
+
+        <textarea
+            v-model="newNote"
+            class="form-control mt-3"
+            rows="3"
+            placeholder="Interne notitie..."
+        ></textarea>
+
+
+
+        <button
+            class="btn btn-primary mt-3"
+            @click="addNote"
+            :disabled="savingNote"
+        >
+
+            {{ savingNote ? 'Opslaan...' : 'Notitie toevoegen' }}
+
+        </button>
+
+
+    </div>
+
+
+</div>
+
 
             <div
                 v-else
@@ -332,6 +425,7 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 
+
 import api from '../api/axios'
 
 interface Ticket {
@@ -367,6 +461,8 @@ assignedAdmin?: {
     name: string
 }
 
+notes?: Note[]
+
 }
 
 interface Admin {
@@ -374,6 +470,20 @@ interface Admin {
     id: number
 
     name: string
+
+}
+
+interface Note {
+
+    id: number
+
+    note: string
+
+    created_at: string
+
+    user?: {
+        name: string
+    }
 
 }
 
@@ -404,6 +514,17 @@ const admins = ref<Admin[]>([])
 const selectedAdmin = ref<number | null>(null)
 
 const assignMessage = ref('')
+
+const notes = ref<Note[]>([])
+
+const newNote = ref('')
+
+const noteError = ref('')
+
+const noteMessage = ref('')
+
+const savingNote = ref(false)
+
 
 
 async function loadTicket() {
@@ -624,14 +745,123 @@ async function assignAdmin() {
 
 }
 
+async function loadNotes() {
+
+    try {
+
+        const response = await api.get(
+            `/tickets/${route.params.id}/notes`
+        )
+
+
+        notes.value = response.data.notes
+
+
+    } catch {
+
+        noteError.value =
+            'Notities konden niet worden geladen.'
+
+    }
+
+}
+
+async function addNote() {
+
+
+    if (!newNote.value.trim()) {
+
+        noteError.value =
+            'Vul eerst een notitie in.'
+
+        return
+
+    }
+
+
+
+    try {
+
+
+        savingNote.value = true
+
+        noteError.value = ''
+
+
+
+        await api.post(
+            `/tickets/${route.params.id}/notes`,
+            {
+                note: newNote.value
+            }
+        )
+
+
+
+        newNote.value = ''
+
+
+
+        noteMessage.value =
+            'Notitie toegevoegd.'
+
+
+
+        await loadNotes()
+
+
+
+    } catch {
+
+
+        noteError.value =
+            'Notitie kon niet worden toegevoegd.'
+
+
+    } finally {
+
+
+        savingNote.value = false
+
+    }
+
+
+}
+
+async function deleteNote(id:number) {
+
+
+    if(!confirm('Notitie verwijderen?')) {
+
+        return
+
+    }
+
+
+    await api.delete(
+        `/notes/${id}`
+    )
+
+
+    await loadNotes()
+
+}
+
 
 onMounted(async () => {
 
     await loadTicket()
 
-    await loadAdmins()
+
+    if(authStore.user?.role === 'admin') {
+
+        await loadNotes()
+
+    }
 
 })
+
+
 
 
 

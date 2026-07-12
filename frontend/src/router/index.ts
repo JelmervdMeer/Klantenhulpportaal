@@ -7,6 +7,7 @@ import TicketDetailView from '../views/TicketDetailView.vue'
 import CreateTicketView from "../views/CreateTicketView.vue"
 
 
+
 const router = createRouter({
 
     history: createWebHistory(),
@@ -57,6 +58,13 @@ const router = createRouter({
     name: 'admin-categories',
     component: () =>
         import('../views/AdminCategoriesView.vue')
+},
+
+{
+    path: '/admin/users',
+    name: 'admin-users',
+    component: () =>
+        import('../views/AdminUserView.vue')
 }
 
     ]
