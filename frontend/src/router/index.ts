@@ -4,6 +4,7 @@ import LoginView from '../views/LoginView.vue'
 import DashboardView from '../views/DashboardView.vue'
 import TicketsView from '../views/TicketsView.vue'
 import TicketDetailView from '../views/TicketDetailView.vue'
+import CreateTicketView from "../views/CreateTicketView.vue"
 
 
 const router = createRouter({
@@ -43,7 +44,13 @@ const router = createRouter({
             path: '/tickets/:id',
             name: 'ticket-detail',
             component: TicketDetailView
-        }
+        },
+
+        {
+    path: '/tickets/create',
+    name: 'ticket-create',
+    component: CreateTicketView
+}
 
     ]
 

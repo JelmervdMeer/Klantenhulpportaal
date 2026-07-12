@@ -3,6 +3,13 @@
 
         <h1>Mijn tickets</h1>
 
+        <RouterLink
+    to="/tickets/create"
+    class="btn btn-primary mb-3"
+>
+    Nieuw ticket
+</RouterLink>
+
 
         <div
             v-if="loading"

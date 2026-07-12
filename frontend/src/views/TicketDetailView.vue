@@ -117,6 +117,51 @@
                 Er zijn nog geen reacties op dit ticket.
             </div>
 
+            <div class="card mt-4">
+
+    <div class="card-header">
+
+        <h4 class="mb-0">
+            Reactie plaatsen
+        </h4>
+
+    </div>
+
+
+    <div class="card-body">
+
+
+        <div
+            v-if="reactionError"
+            class="alert alert-danger"
+        >
+            {{ reactionError }}
+        </div>
+
+
+        <textarea
+            v-model="newReaction"
+            class="form-control"
+            rows="4"
+            placeholder="Typ hier je reactie..."
+        ></textarea>
+
+
+        <button
+            class="btn btn-primary mt-3"
+            @click="addReaction"
+            :disabled="sending"
+        >
+
+            {{ sending ? 'Versturen...' : 'Reactie plaatsen' }}
+
+        </button>
+
+
+    </div>
+
+</div>
+
         </div>
 
     </div>
@@ -167,6 +212,12 @@ const loading = ref(true)
 
 const error = ref('')
 
+const newReaction = ref('')
+
+const sending = ref(false)
+
+const reactionError = ref('')
+
 
 async function loadTicket() {
 
@@ -185,6 +236,46 @@ async function loadTicket() {
     } finally {
 
         loading.value = false
+
+    }
+
+}
+
+async function addReaction() {
+
+    if (!newReaction.value.trim()) {
+        reactionError.value = 'Vul eerst een reactie in.'
+        return
+    }
+
+
+    try {
+
+        sending.value = true
+        reactionError.value = ''
+
+
+        await api.post(
+            `/tickets/${route.params.id}/reactions`,
+            {
+                message: newReaction.value
+            }
+        )
+
+
+        newReaction.value = ''
+
+
+        await loadTicket()
+
+
+    } catch {
+
+        reactionError.value = 'Reactie kon niet worden geplaatst.'
+
+    } finally {
+
+        sending.value = false
 
     }
 

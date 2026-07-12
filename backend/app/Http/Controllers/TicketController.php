@@ -89,4 +89,33 @@ class TicketController extends Controller
         'reaction' => $reaction
     ], 201);
 }
+
+public function store(Request $request)
+{
+    $validated = $request->validate([
+        'title' => 'required|string|max:255',
+        'description' => 'required|string',
+        'category_id' => 'required|exists:categories,id',
+        'priority' => 'required|in:Laag,Normaal,Hoog',
+    ]);
+
+
+    $ticket = Ticket::create([
+        'title' => $validated['title'],
+        'description' => $validated['description'],
+        'category_id' => $validated['category_id'],
+        'priority' => $validated['priority'],
+        'status' => 'Open',
+        'user_id' => $request->user()->id,
+    ]);
+
+
+    $ticket->load('category');
+
+
+    return response()->json([
+        'message' => 'Ticket succesvol aangemaakt.',
+        'ticket' => $ticket
+    ], 201);
+}
 }
