@@ -1,45 +1,102 @@
 <template>
 
-    <div class="container mt-4">
+<div class="container mt-4">
 
-        <div
-            v-if="loading"
-            class="alert alert-info"
-        >
-            Ticket laden...
+
+    <div
+        v-if="loading"
+        class="alert alert-info"
+    >
+        Ticket laden...
+    </div>
+
+
+    <div
+        v-if="error"
+        class="alert alert-danger"
+    >
+        {{ error }}
+    </div>
+
+
+
+    <div v-if="ticket">
+
+
+        <!-- Header -->
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <div>
+
+                <button
+                    class="btn btn-outline-secondary mb-3"
+                    @click="$router.back()"
+                >
+                    <i class="bi bi-arrow-left"></i>
+                    Terug
+                </button>
+
+
+                <h1 class="fw-bold mb-1">
+                    {{ ticket.title }}
+                </h1>
+
+
+                <small class="text-muted">
+                    Ticket #{{ ticket.id }}
+                </small>
+
+            </div>
+
+
+
+            <span
+                class="badge fs-6"
+                :class="statusClass(ticket.status)"
+            >
+                {{ ticket.status }}
+            </span>
+
+
         </div>
 
 
-        <div
-            v-if="error"
-            class="alert alert-danger"
-        >
-            {{ error }}
-        </div>
 
 
-        <div v-if="ticket">
-
-            <h1>
-                {{ ticket.title }}
-            </h1>
+        <div class="row g-4">
 
 
-            <div class="card mt-3">
+            <!-- Linker kolom -->
 
-                <div class="card-body">
+            <div class="col-lg-4">
 
 
-                    <div>
+                <div class="card">
 
-                        <strong>Status:</strong>
+                    <div class="card-body">
+
+
+                        <h4 class="mb-4">
+                            Ticket informatie
+                        </h4>
+
+
+
+                        <p>
+
+                            <strong>Status</strong>
+
+                        </p>
+
 
                         <span
-                            class="badge ms-2"
+                            class="badge"
                             :class="statusClass(ticket.status)"
                         >
                             {{ ticket.status }}
                         </span>
+
 
 
                         <div
@@ -70,222 +127,157 @@
                         </div>
 
 
-                        <div
-                            v-if="statusMessage"
-                            class="alert alert-info mt-3"
+
+
+                        <hr>
+
+
+
+                        <p>
+
+                            <strong>Prioriteit</strong>
+
+                        </p>
+
+
+                        <span
+                            class="badge"
+                            :class="priorityClass(ticket.priority)"
                         >
-                            {{ statusMessage }}
+                            {{ ticket.priority }}
+                        </span>
+
+
+
+                        <div
+                            v-if="authStore.user?.role === 'admin'"
+                            class="mt-3"
+                        >
+
+                            <select
+                                v-model="selectedPriority"
+                                class="form-select"
+                                @change="updatePriority"
+                            >
+
+                                <option value="Laag">
+                                    Laag
+                                </option>
+
+                                <option value="Normaal">
+                                    Normaal
+                                </option>
+
+                                <option value="Hoog">
+                                    Hoog
+                                </option>
+
+                            </select>
+
                         </div>
 
-                    </div>
 
 
-                    <div class="mt-3">
 
-    <strong>Prioriteit:</strong>
-
-    <span
-        class="badge ms-2"
-        :class="priorityClass(ticket.priority)"
-    >
-        {{ ticket.priority }}
-    </span>
+                        <hr>
 
 
-    <div
-        v-if="authStore.user?.role === 'admin'"
-        class="mt-3"
-    >
 
-        <select
-            v-model="selectedPriority"
-            class="form-select"
-            @change="updatePriority"
-        >
+                        <p>
 
-            <option value="Laag">
-                Laag
-            </option>
+                            <strong>Categorie</strong><br>
 
-            <option value="Normaal">
-                Normaal
-            </option>
+                            {{ ticket.category?.name }}
 
-            <option value="Hoog">
-                Hoog
-            </option>
-
-        </select>
+                        </p>
 
 
-    </div>
+
+                        <p>
+
+                            <strong>Aangemaakt door</strong><br>
+
+                            {{ ticket.user?.name }}
+
+                        </p>
 
 
-    <div
-        v-if="priorityMessage"
-        class="alert alert-info mt-3"
-    >
-        {{ priorityMessage }}
-    </div>
 
-</div>
+                        <p>
 
+                            <strong>Toegewezen aan</strong><br>
 
-                    <p>
-                        <strong>Categorie:</strong>
-                        {{ ticket.category?.name }}
-                    </p>
+                            {{ ticket.assignedAdmin?.name ?? 'Nog niet toegewezen' }}
+
+                        </p>
 
 
-                    <p>
-                        <strong>Aangemaakt door:</strong>
-                        {{ ticket.user?.name }}
-                    </p>
-
-                    <div class="mt-3">
-
-    <strong>Toegewezen aan:</strong>
-
-    <span class="ms-2">
-
-        {{ ticket.assignedAdmin?.name ?? 'Nog niet toegewezen' }}
-
-    </span>
-
-
-    <div
-        v-if="authStore.user?.role === 'admin'"
-        class="mt-3"
-    >
-
-        <select
-            v-model="selectedAdmin"
-            class="form-select"
-            @change="assignAdmin"
-        >
-
-            <option :value="null">
-
-                Niet toegewezen
-
-            </option>
-
-            <option
-                v-for="admin in admins"
-                :key="admin.id"
-                :value="admin.id"
-            >
-
-                {{ admin.name }}
-
-            </option>
-
-        </select>
-
-    </div>
-
-
-    <div
-        v-if="assignMessage"
-        class="alert alert-info mt-3"
-    >
-
-        {{ assignMessage }}
-
-    </div>
-
-</div>
-
-
-                    <hr>
-
-
-                    <h5>
-                        Beschrijving
-                    </h5>
-
-
-                    <p>
-                        {{ ticket.description }}
-                    </p>
-
-
-                </div>
-
-            </div>
-
-
-            <div
-                v-if="ticket.reactions?.length"
-                class="card mt-4"
-            >
-
-                <div class="card-header">
-
-                    <h4 class="mb-0">
-                        Reacties
-                    </h4>
-
-                </div>
-
-
-                <div class="card-body">
-
-                    <div
-                        v-for="reaction in ticket.reactions"
-                        :key="reaction.id"
-                        class="border-bottom mb-3 pb-3"
-                    >
-
-                        <strong>
-                            {{ reaction.user?.name }}
-                        </strong>
-
-
-                        <br>
-
-
-                        <small class="text-muted">
-                            {{ reaction.created_at }}
-                        </small>
 
 
                         <div
-    v-if="editingReactionId === reaction.id"
->
+                            v-if="authStore.user?.role === 'admin'"
+                            class="mt-3"
+                        >
 
-    <textarea
-        v-model="editingReactionText"
-        class="form-control"
-        rows="3"
-    ></textarea>
+                            <select
+                                v-model="selectedAdmin"
+                                class="form-select"
+                                @change="assignAdmin"
+                            >
 
-
-    <button
-        class="btn btn-primary btn-sm mt-2"
-        @click="updateReaction"
-    >
-        Opslaan
-    </button>
+                                <option :value="null">
+                                    Niet toegewezen
+                                </option>
 
 
-</div>
+                                <option
+                                    v-for="admin in admins"
+                                    :key="admin.id"
+                                    :value="admin.id"
+                                >
+
+                                    {{ admin.name }}
+
+                                </option>
 
 
-<p
-    v-else
-    class="mt-2"
->
-    {{ reaction.message }}
-</p>
+                            </select>
 
-<button
-    v-if="authStore.user?.role === 'admin'"
-    class="btn btn-warning btn-sm"
-    @click="editReaction(reaction)"
->
-    Bewerken
-</button>
+
+                        </div>
+
+
+
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+
+
+
+
+            <!-- Rechter kolom -->
+
+            <div class="col-lg-8">
+
+
+                <div class="card">
+
+                    <div class="card-body">
+
+
+                        <h4>
+                            Beschrijving
+                        </h4>
+
+
+                        <p>
+                            {{ ticket.description }}
+                        </p>
 
 
                     </div>
@@ -294,192 +286,266 @@
                 </div>
 
 
-            </div>
 
-            <div
-    v-if="authStore.user?.role === 'admin'"
-    class="card mt-4"
+
+
+                <!-- Reacties -->
+
+
+                <div class="card mt-4">
+
+
+                    <div class="card-header">
+
+                        <h4 class="mb-0">
+                            Reacties
+                        </h4>
+
+                    </div>
+
+
+
+                    <div class="card-body">
+
+
+                        <div
+                            v-if="ticket.reactions?.length"
+                        >
+
+
+                            <div
+    v-for="reaction in ticket.reactions"
+    :key="reaction.id"
+    class="reaction-item"
 >
 
-    <div class="card-header">
 
-        <h4 class="mb-0">
-            Interne notities
-        </h4>
+    <div class="reaction-avatar">
+
+        {{ reaction.user?.name?.charAt(0).toUpperCase() }}
 
     </div>
 
 
 
-    <div class="card-body">
+    <div class="reaction-content">
 
 
-        <div
-            v-if="noteMessage"
-            class="alert alert-success"
-        >
-            {{ noteMessage }}
-        </div>
+        <div class="d-flex justify-content-between">
 
-
-
-        <div
-            v-if="noteError"
-            class="alert alert-danger"
-        >
-            {{ noteError }}
-        </div>
-
-
-
-        <div
-            v-for="note in notes"
-            :key="note.id"
-            class="border-bottom mb-3 pb-3"
-        >
 
             <strong>
-                {{ note.user?.name }}
+
+                {{ reaction.user?.name }}
+
             </strong>
 
-            <small class="text-muted ms-2">
-                {{ note.created_at }}
+
+            <small class="text-muted">
+
+                {{ reaction.created_at }}
+
             </small>
 
 
-            <div
-    v-if="editingNoteId === note.id"
->
-
-    <textarea
-        v-model="editingNoteText"
-        class="form-control"
-        rows="3"
-    ></textarea>
+        </div>
 
 
-    <button
-        class="btn btn-primary btn-sm mt-2"
-        @click="updateNote"
-    >
-        Opslaan
-    </button>
+
+        <p class="mt-2 mb-0">
+
+            {{ reaction.message }}
+
+        </p>
 
 
-</div>
+    </div>
 
 
-<p
-    v-else
-    class="mt-2"
->
-    {{ note.note }}
-</p>
 
 
-            <button
-                class="btn btn-danger btn-sm"
-                @click="deleteNote(note.id)"
-            >
-                Verwijderen
-            </button>
+                                <strong>
+                                    {{ reaction.user?.name }}
+                                </strong>
 
-            <button
-    class="btn btn-warning btn-sm me-2"
-    @click="editNote(note)"
->
-    Bewerken
-</button>
+
+                                <small class="text-muted ms-2">
+                                    {{ reaction.created_at }}
+                                </small>
+
+
+
+                                <p class="mt-2 mb-0">
+                                    {{ reaction.message }}
+                                </p>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                        <p
+                            v-else
+                            class="text-muted"
+                        >
+                            Nog geen reacties.
+                        </p>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+
+                <!-- Reactie toevoegen -->
+
+
+                <div class="card mt-4">
+
+
+                    <div class="card-header">
+
+                        <h4>
+                            Reactie plaatsen
+                        </h4>
+
+                    </div>
+
+
+                    <div class="card-body">
+
+
+                        <textarea
+                            v-model="newReaction"
+                            class="form-control"
+                            rows="4"
+                            placeholder="Typ hier je reactie..."
+                        ></textarea>
+
+
+                        <button
+                            class="btn btn-primary mt-3"
+                            @click="addReaction"
+                            :disabled="sending"
+                        >
+
+                            {{ sending ? 'Versturen...' : 'Reactie plaatsen' }}
+
+                        </button>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+
+            </div>
 
 
         </div>
 
 
 
-        <textarea
-            v-model="newNote"
-            class="form-control mt-3"
-            rows="3"
-            placeholder="Interne notitie..."
-        ></textarea>
 
 
+        <!-- Notities -->
 
-        <button
-            class="btn btn-primary mt-3"
-            @click="addNote"
-            :disabled="savingNote"
+        <div
+            v-if="authStore.user?.role === 'admin'"
+            class="card mt-4"
         >
 
-            {{ savingNote ? 'Opslaan...' : 'Notitie toevoegen' }}
+            <div class="card-header">
 
-        </button>
+                <h4>
+                    Interne notities
+                </h4>
 
-
-    </div>
-
-
-</div>
-
-
-            <div
-                v-else
-                class="alert alert-secondary mt-4"
-            >
-                Er zijn nog geen reacties op dit ticket.
             </div>
 
 
-
-            <div class="card mt-4">
-
-                <div class="card-header">
-
-                    <h4 class="mb-0">
-                        Reactie plaatsen
-                    </h4>
-
-                </div>
+            <div class="card-body">
 
 
-                <div class="card-body">
+                <div
+                    v-for="note in notes"
+                    :key="note.id"
+                    class="note-item"
+                >
+
+                    <strong>
+                        {{ note.user?.name }}
+                    </strong>
 
 
-                    <div
-                        v-if="reactionError"
-                        class="alert alert-danger"
-                    >
-                        {{ reactionError }}
-                    </div>
+                    <small class="text-muted ms-2">
+                        {{ note.created_at }}
+                    </small>
 
 
-                    <textarea
-                        v-model="newReaction"
-                        class="form-control"
-                        rows="4"
-                        placeholder="Typ hier je reactie..."
-                    ></textarea>
+                    <p class="mt-2">
+                        {{ note.note }}
+                    </p>
 
 
                     <button
-                        class="btn btn-primary mt-3"
-                        @click="addReaction"
-                        :disabled="sending"
+                        class="btn btn-warning btn-sm me-2"
+                        @click="editNote(note)"
                     >
+                        Bewerken
+                    </button>
 
-                        {{ sending ? 'Versturen...' : 'Reactie plaatsen' }}
 
+                    <button
+                        class="btn btn-danger btn-sm"
+                        @click="deleteNote(note.id)"
+                    >
+                        Verwijderen
                     </button>
 
 
                 </div>
 
+
+
+                <textarea
+                    v-model="newNote"
+                    class="form-control"
+                    rows="3"
+                    placeholder="Interne notitie..."
+                ></textarea>
+
+
+                <button
+                    class="btn btn-primary mt-3"
+                    @click="addNote"
+                    :disabled="savingNote"
+                >
+
+                    {{ savingNote ? 'Opslaan...' : 'Notitie toevoegen' }}
+
+                </button>
+
+
             </div>
 
 
         </div>
 
+
+
     </div>
+
+
+</div>
 
 </template>
 
@@ -489,80 +555,114 @@
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
-
-
 import api from '../api/axios'
+
 
 interface Ticket {
 
     id: number
+
     title: string
+
     description: string
+
     status: string
+
     priority: string
 
+
     category?: {
+
         name: string
+
     }
+
 
     user?: {
+
         name: string
+
     }
 
+
     reactions?: {
+
         id: number
+
         message: string
+
         created_at: string
 
+
         user?: {
+
             name: string
+
         }
+
     }[]
+
+
 
     assigned_to?: number | null
 
-assignedAdmin?: {
-    id: number
-    name: string
+
+    assignedAdmin?: {
+
+        id: number
+
+        name: string
+
+    }
+
+
 }
 
-notes?: Note[]
 
-}
 
 interface Admin {
 
-    id: number
+    id:number
 
-    name: string
+    name:string
 
 }
 
+
+
 interface Note {
 
-    id: number
+    id:number
 
-    note: string
+    note:string
 
-    created_at: string
+    created_at:string
+
 
     user?: {
-        name: string
+
+        name:string
+
     }
 
 }
 
-const selectedPriority = ref('')
-const priorityMessage = ref('')
+
 
 const route = useRoute()
+
 const authStore = useAuthStore()
 
+
+
 const ticket = ref<Ticket | null>(null)
+
 
 const loading = ref(true)
 
 const error = ref('')
+
+
 
 const newReaction = ref('')
 
@@ -570,15 +670,29 @@ const sending = ref(false)
 
 const reactionError = ref('')
 
-const statusMessage = ref('')
+const reactionMessage = ref('')
+
+
 
 const selectedStatus = ref('')
+
+const statusMessage = ref('')
+
+
+
+const selectedPriority = ref('')
+
+const priorityMessage = ref('')
+
+
 
 const admins = ref<Admin[]>([])
 
 const selectedAdmin = ref<number | null>(null)
 
 const assignMessage = ref('')
+
+
 
 const notes = ref<Note[]>([])
 
@@ -588,17 +702,19 @@ const noteError = ref('')
 
 const noteMessage = ref('')
 
+const savingNote = ref(false)
+
+
+
 const editingNoteId = ref<number | null>(null)
 
 const editingNoteText = ref('')
 
-const savingNote = ref(false)
+
 
 const editingReactionId = ref<number | null>(null)
 
 const editingReactionText = ref('')
-
-const reactionMessage = ref('')
 
 
 
@@ -1024,6 +1140,8 @@ onMounted(async () => {
 
     if(authStore.user?.role === 'admin') {
 
+        await loadAdmins()
+
         await loadNotes()
 
     }
@@ -1035,3 +1153,215 @@ onMounted(async () => {
 
 
 </script>
+<style scoped>
+
+.card {
+
+    border: none;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 8px 24px rgba(0,0,0,.08);
+
+}
+
+
+.card-header {
+
+    background:white;
+
+    border-bottom:1px solid #e5e7eb;
+
+    border-radius:16px 16px 0 0 !important;
+
+    font-weight:600;
+
+}
+
+
+
+h1 {
+
+    letter-spacing:-0.5px;
+
+}
+
+
+
+.badge {
+
+    padding:8px 12px;
+
+    border-radius:10px;
+
+}
+
+
+
+.btn {
+
+    border-radius:10px;
+
+}
+
+
+
+.form-select,
+.form-control {
+
+    border-radius:10px;
+
+    border:1px solid #d1d5db;
+
+}
+
+
+
+.form-control:focus,
+.form-select:focus {
+
+    box-shadow:
+        0 0 0 .2rem rgba(13,110,253,.15);
+
+}
+
+
+
+.ticket-info-item {
+
+    margin-bottom:15px;
+
+}
+
+
+
+.border-bottom {
+
+    border-color:#e5e7eb !important;
+
+}
+
+
+
+.card-body p {
+
+    line-height:1.7;
+
+}
+
+
+
+textarea {
+
+    resize:none;
+
+}
+
+
+
+/* Reacties */
+
+.reaction {
+
+    background:#f8fafc;
+
+    border-radius:12px;
+
+    padding:15px;
+
+}
+
+
+
+/* Admin notities */
+
+.note {
+
+    background:#fff7ed;
+
+    border-radius:12px;
+
+    padding:15px;
+
+}
+
+/* Reactie timeline */
+
+
+.reaction-item {
+
+    display:flex;
+
+    gap:15px;
+
+    padding:18px;
+
+    margin-bottom:15px;
+
+    background:#f8fafc;
+
+    border-radius:14px;
+
+    border-left:4px solid #2563eb;
+
+}
+
+
+
+.reaction-avatar {
+
+    width:42px;
+
+    height:42px;
+
+    border-radius:50%;
+
+    background:#2563eb;
+
+    color:white;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-weight:bold;
+
+    flex-shrink:0;
+
+}
+
+
+
+.reaction-content {
+
+    flex:1;
+
+}
+
+
+
+.reaction-content p {
+
+    color:#334155;
+
+}
+
+.note-item {
+
+    background:#fff7ed;
+
+    border-left:4px solid #f97316;
+
+    padding:18px;
+
+    border-radius:14px;
+
+    margin-bottom:15px;
+
+}
+
+
+</style>

@@ -1,4 +1,6 @@
 <template>
+    
+
 
     <div class="container mt-5">
 
@@ -79,6 +81,7 @@
 
 import { ref } from 'vue'
 import api from '../api/axios'
+import Navbar from '../components/Navbar.vue'
 
 
 const form = ref({

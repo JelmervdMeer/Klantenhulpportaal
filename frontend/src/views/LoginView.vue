@@ -1,4 +1,5 @@
 <template>
+    
 
     <div class="login">
 
@@ -48,6 +49,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { useAuthStore } from '../stores/auth'
+import Navbar from '../components/Navbar.vue'
 
 
 const auth = useAuthStore()

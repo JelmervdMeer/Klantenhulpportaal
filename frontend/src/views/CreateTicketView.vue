@@ -1,4 +1,5 @@
 <template>
+    
 
     <div class="container mt-4">
 
@@ -132,6 +133,7 @@
 
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import Navbar from '../components/Navbar.vue'
 
 import api from '../api/axios'
 

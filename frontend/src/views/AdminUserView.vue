@@ -2,6 +2,7 @@
 
 import { ref, onMounted } from 'vue'
 import api from '../api/axios'
+import Navbar from '../components/Navbar.vue'
 
 interface User {
 
@@ -138,6 +139,7 @@ onMounted(loadUsers)
 
 </script>
 <template>
+    
 
     <div class="container mt-4">
 

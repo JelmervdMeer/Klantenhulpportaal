@@ -1,4 +1,5 @@
 <template>
+   
 
     <div class="container mt-4">
 
@@ -259,6 +260,7 @@ import { ref, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 import api from '../api/axios'
+import Navbar from '../components/Navbar.vue'
 
 
 
