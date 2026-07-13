@@ -6,6 +6,8 @@ use App\Http\Controllers\TicketController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\NoteController;
+use App\Http\Controllers\ReactionController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 
 Route::post('/register', [
@@ -50,6 +52,21 @@ Route::middleware('auth:sanctum')->group(function () {
     TicketController::class,
     'show'
 ]);
+
+Route::get(
+    '/email/verify/{id}/{hash}',
+    function (EmailVerificationRequest $request) {
+
+        $request->fulfill();
+
+        return response()->json([
+            'message' => 'Email succesvol bevestigd.'
+        ]);
+
+    }
+)
+->middleware(['auth:sanctum', 'signed'])
+->name('verification.verify');
 
 Route::put('/tickets/{ticket}/status', [
     TicketController::class,
@@ -128,6 +145,11 @@ Route::get('/users', [UserController::class, 'index']);
 Route::put('/users/{user}', [UserController::class, 'update']);
 
 Route::delete('/users/{user}', [UserController::class, 'destroy']);
+
+Route::put(
+    '/reactions/{reaction}',
+    [ReactionController::class, 'update']
+);
 
 
 

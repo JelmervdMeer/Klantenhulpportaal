@@ -250,9 +250,42 @@
                         </small>
 
 
-                        <p class="mt-2">
-                            {{ reaction.message }}
-                        </p>
+                        <div
+    v-if="editingReactionId === reaction.id"
+>
+
+    <textarea
+        v-model="editingReactionText"
+        class="form-control"
+        rows="3"
+    ></textarea>
+
+
+    <button
+        class="btn btn-primary btn-sm mt-2"
+        @click="updateReaction"
+    >
+        Opslaan
+    </button>
+
+
+</div>
+
+
+<p
+    v-else
+    class="mt-2"
+>
+    {{ reaction.message }}
+</p>
+
+<button
+    v-if="authStore.user?.role === 'admin'"
+    class="btn btn-warning btn-sm"
+    @click="editReaction(reaction)"
+>
+    Bewerken
+</button>
 
 
                     </div>
@@ -314,9 +347,34 @@
             </small>
 
 
-            <p class="mt-2">
-                {{ note.note }}
-            </p>
+            <div
+    v-if="editingNoteId === note.id"
+>
+
+    <textarea
+        v-model="editingNoteText"
+        class="form-control"
+        rows="3"
+    ></textarea>
+
+
+    <button
+        class="btn btn-primary btn-sm mt-2"
+        @click="updateNote"
+    >
+        Opslaan
+    </button>
+
+
+</div>
+
+
+<p
+    v-else
+    class="mt-2"
+>
+    {{ note.note }}
+</p>
 
 
             <button
@@ -325,6 +383,13 @@
             >
                 Verwijderen
             </button>
+
+            <button
+    class="btn btn-warning btn-sm me-2"
+    @click="editNote(note)"
+>
+    Bewerken
+</button>
 
 
         </div>
@@ -523,7 +588,17 @@ const noteError = ref('')
 
 const noteMessage = ref('')
 
+const editingNoteId = ref<number | null>(null)
+
+const editingNoteText = ref('')
+
 const savingNote = ref(false)
+
+const editingReactionId = ref<number | null>(null)
+
+const editingReactionText = ref('')
+
+const reactionMessage = ref('')
 
 
 
@@ -844,6 +919,100 @@ async function deleteNote(id:number) {
 
 
     await loadNotes()
+
+}
+
+function editReaction(reaction: any) {
+
+    editingReactionId.value = reaction.id
+
+    editingReactionText.value = reaction.message
+
+}
+
+async function updateReaction() {
+
+    if (!editingReactionId.value) {
+        return
+    }
+
+
+    try {
+
+        await api.put(
+            `/reactions/${editingReactionId.value}`,
+            {
+                message: editingReactionText.value
+            }
+        )
+
+
+        reactionMessage.value =
+            'Reactie aangepast.'
+
+
+        editingReactionId.value = null
+
+        editingReactionText.value = ''
+
+
+        await loadTicket()
+
+
+    } catch {
+
+        reactionError.value =
+            'Reactie kon niet worden aangepast.'
+
+    }
+
+}
+
+function editNote(note: Note) {
+
+    editingNoteId.value = note.id
+
+    editingNoteText.value = note.note
+
+}
+
+async function updateNote() {
+
+    if (!editingNoteId.value) {
+
+        return
+
+    }
+
+
+    try {
+
+        await api.put(
+            `/notes/${editingNoteId.value}`,
+            {
+                note: editingNoteText.value
+            }
+        )
+
+
+        noteMessage.value =
+            'Notitie aangepast.'
+
+
+        editingNoteId.value = null
+
+        editingNoteText.value = ''
+
+
+        await loadNotes()
+
+
+    } catch {
+
+        noteError.value =
+            'Notitie kon niet worden aangepast.'
+
+    }
 
 }
 

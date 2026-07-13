@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Models;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -12,12 +12,15 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+
 #[Fillable(['name', 'email', 'password', 'role'])]
 #[Hidden(['password', 'remember_token'])]
-class User extends Authenticatable
+
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
     use HasApiTokens, HasFactory, Notifiable;
+
 
     /**
      * Get the attributes that should be cast.
@@ -32,23 +35,27 @@ class User extends Authenticatable
         ];
     }
 
+
     public function tickets(): HasMany
-{
-    return $this->hasMany(Ticket::class);
-}
+    {
+        return $this->hasMany(Ticket::class);
+    }
 
-public function assignedTickets(): HasMany
-{
-    return $this->hasMany(Ticket::class, 'assigned_to');
-}
 
-public function reactions(): HasMany
-{
-    return $this->hasMany(Reaction::class);
-}
+    public function assignedTickets(): HasMany
+    {
+        return $this->hasMany(Ticket::class, 'assigned_to');
+    }
 
-public function notes(): HasMany
-{
-    return $this->hasMany(Note::class);
-}
+
+    public function reactions(): HasMany
+    {
+        return $this->hasMany(Reaction::class);
+    }
+
+
+    public function notes(): HasMany
+    {
+        return $this->hasMany(Note::class);
+    }
 }
