@@ -13,7 +13,7 @@
 
             <div class="logo">
 
-                <i class="bi bi-life-preserver"></i>
+                <i class="bi bi-headset"></i>
 
             </div>
 
