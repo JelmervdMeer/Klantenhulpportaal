@@ -119,7 +119,7 @@ Email:
 
 admin@test.nl
 
-Wachtwoord: wachtwwoord123
+Wachtwoord: nieuwwachtwoord123
 
 password
 Gebruiker

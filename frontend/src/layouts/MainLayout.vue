@@ -10,12 +10,11 @@
 
             <!-- Logo links -->
 
-            <div class="header-logo">
+            <div class="logo">
 
-                <i class="bi bi-life-preserver"></i>
+    <i class="bi bi-headset"></i>
 
-            </div>
-
+</div>
 
 
 
@@ -117,7 +116,7 @@
                 <div class="logo">
 
 
-                    <i class="bi bi-life-preserver"></i>
+                    <i class="bi bi-headset"></i>
 
 
                     <span>
@@ -461,22 +460,96 @@ async function logout(){
 }
 
 
+.logo {
+
+    width:80px;
+
+    height:80px;
+
+    margin:0 auto 20px;
+
+    background:white;
 
 
-
-.logo{
-
-    font-size:24px;
-
-    font-weight:700;
+    border-radius:50%;
 
     display:flex;
 
     align-items:center;
 
-    gap:12px;
+    justify-content:center;
 
-    margin-bottom:30px;
+    animation: logoPulse 4s ease-in-out infinite;
+
+}
+
+
+
+.logo i {
+
+    font-size:42px;
+
+    color:#2563eb;
+
+    animation: iconColor 4s ease-in-out infinite;
+
+}
+
+
+
+/* subtiele kleurverandering */
+
+@keyframes iconColor {
+
+
+    0% {
+
+        color:#2563eb;
+
+    }
+
+
+    50% {
+
+        color:#60a5fa;
+
+    }
+
+
+    100% {
+
+        color:#2563eb;
+
+    }
+
+}
+
+
+
+/* lichte beweging */
+
+@keyframes logoPulse {
+
+
+    0% {
+
+        transform:scale(1);
+
+    }
+
+
+    50% {
+
+        transform:scale(1.04);
+
+    }
+
+
+    100% {
+
+        transform:scale(1);
+
+    }
 
 }
 
