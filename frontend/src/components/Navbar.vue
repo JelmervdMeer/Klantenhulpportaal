@@ -1,18 +1,18 @@
 <template>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
+    <nav>
 
         <div class="container">
 
-            <RouterLink
+            <!--<RouterLink
                 class="navbar-brand fw-bold"
                 to="/dashboard"
             >
                 Klantenhulpportaal
-            </RouterLink>
+            </RouterLink>-->
 
 
-            <div class="d-flex align-items-center">
+          <!--  <div class="d-flex align-items-center">
 
                 <span class="text-white me-3">
 
@@ -40,7 +40,7 @@
                     to="/tickets"
                 >
                     Tickets
-                </RouterLink>
+                </RouterLink> -->
 
 
                 <RouterLink
@@ -61,16 +61,16 @@
                 </RouterLink>
 
 
-                <button
+               <!-- <button
                     class="btn btn-danger btn-sm"
                     @click="logout"
                 >
                     Uitloggen
-                </button>
+                </button> -->
 
             </div>
 
-        </div>
+        
 
     </nav>
 

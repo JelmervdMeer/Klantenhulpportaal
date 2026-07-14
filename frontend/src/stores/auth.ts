@@ -1,6 +1,12 @@
 import { defineStore } from 'pinia'
 import api from '../api/axios'
 
+const token = localStorage.getItem('token')
+
+if (token) {
+    api.defaults.headers.common.Authorization = `Bearer ${token}`
+}
+
 interface User {
     id: number
     name: string
@@ -41,6 +47,8 @@ export const useAuthStore = defineStore('auth', {
 
 
         async logout() {
+
+            console.log(localStorage.getItem('token'))
 
             await api.post('/logout')
 

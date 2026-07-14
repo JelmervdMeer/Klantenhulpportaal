@@ -1,36 +1,37 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\TicketController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\NoteController;
-use App\Http\Controllers\ReactionController;
-use App\Http\Controllers\DashboardController;
-
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\NoteController;
+use App\Http\Controllers\ReactionController;
+use App\Http\Controllers\TicketController;
+use App\Http\Controllers\UserController;
 
+
+/*
+|--------------------------------------------------------------------------
+| Publieke routes
+|--------------------------------------------------------------------------
+*/
 
 Route::post('/register', [
     AuthController::class,
     'register'
 ]);
 
-
 Route::post('/login', [
     AuthController::class,
     'login'
 ]);
 
-
 Route::post('/forgot-password', [
     AuthController::class,
     'forgotPassword'
 ]);
-
 
 Route::post('/reset-password', [
     AuthController::class,
@@ -38,9 +39,13 @@ Route::post('/reset-password', [
 ]);
 
 
+/*
+|--------------------------------------------------------------------------
+| Beveiligde routes
+|--------------------------------------------------------------------------
+*/
 
 Route::middleware('auth:sanctum')->group(function () {
-
 
     /*
     |--------------------------------------------------------------------------
@@ -53,12 +58,10 @@ Route::middleware('auth:sanctum')->group(function () {
         'logout'
     ]);
 
-
     Route::get('/user', [
         AuthController::class,
         'user'
     ]);
-
 
 
     /*
@@ -73,10 +76,9 @@ Route::middleware('auth:sanctum')->group(function () {
     ]);
 
 
-
     /*
     |--------------------------------------------------------------------------
-    | Email verificatie
+    | E-mailverificatie
     |--------------------------------------------------------------------------
     */
 
@@ -87,14 +89,13 @@ Route::middleware('auth:sanctum')->group(function () {
             $request->fulfill();
 
             return response()->json([
-                'message' => 'Email succesvol bevestigd.'
+                'message' => 'E-mail succesvol bevestigd.'
             ]);
 
         }
     )
-    ->middleware(['signed'])
-    ->name('verification.verify');
-
+        ->middleware(['signed'])
+        ->name('verification.verify');
 
 
     /*
@@ -108,36 +109,30 @@ Route::middleware('auth:sanctum')->group(function () {
         'index'
     ]);
 
-
     Route::post('/tickets', [
         TicketController::class,
         'store'
     ]);
-
 
     Route::get('/tickets/{ticket}', [
         TicketController::class,
         'show'
     ]);
 
-
     Route::put('/tickets/{ticket}/status', [
         TicketController::class,
         'updateStatus'
     ]);
-
 
     Route::put('/tickets/{ticket}/priority', [
         TicketController::class,
         'updatePriority'
     ]);
 
-
     Route::put('/tickets/{ticket}/assign', [
         TicketController::class,
         'assign'
     ]);
-
 
 
     /*
@@ -151,12 +146,10 @@ Route::middleware('auth:sanctum')->group(function () {
         'storeReaction'
     ]);
 
-
     Route::put('/reactions/{reaction}', [
         ReactionController::class,
         'update'
     ]);
-
 
 
     /*
@@ -170,24 +163,20 @@ Route::middleware('auth:sanctum')->group(function () {
         'index'
     ]);
 
-
     Route::post('/categories', [
         CategoryController::class,
         'store'
     ]);
-
 
     Route::put('/categories/{category}', [
         CategoryController::class,
         'update'
     ]);
 
-
     Route::delete('/categories/{category}', [
         CategoryController::class,
         'destroy'
     ]);
-
 
 
     /*
@@ -201,24 +190,20 @@ Route::middleware('auth:sanctum')->group(function () {
         'index'
     ]);
 
-
     Route::post('/tickets/{ticket}/notes', [
         NoteController::class,
         'store'
     ]);
-
 
     Route::put('/notes/{note}', [
         NoteController::class,
         'update'
     ]);
 
-
     Route::delete('/notes/{note}', [
         NoteController::class,
         'destroy'
     ]);
-
 
 
     /*
@@ -232,18 +217,15 @@ Route::middleware('auth:sanctum')->group(function () {
         'index'
     ]);
 
-
     Route::get('/admins', [
         UserController::class,
         'admins'
     ]);
 
-
     Route::put('/users/{user}', [
         UserController::class,
         'update'
     ]);
-
 
     Route::delete('/users/{user}', [
         UserController::class,
@@ -251,4 +233,3 @@ Route::middleware('auth:sanctum')->group(function () {
     ]);
 
 });
-

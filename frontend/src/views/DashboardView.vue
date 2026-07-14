@@ -3,15 +3,21 @@
     <div class="container-fluid">
 
 
-        <div class="mb-4">
+        <!-- Pagina header -->
 
-            <h1 class="fw-bold">
-                Dashboard
-            </h1>
+        <div class="page-header">
 
-            <p class="text-muted">
-                Overzicht van het klantenhulpportaal
-            </p>
+            <div>
+
+                <h1 class="fw-bold mb-2">
+                    Dashboard
+                </h1>
+
+                <p class="mb-0">
+                    Overzicht van het klantenhulpportaal
+                </p>
+
+            </div>
 
         </div>
 
@@ -19,34 +25,52 @@
 
         <!-- Statistieken -->
 
-
-        <div class="row g-4 mb-4">
-
-
-            <div class="col-md-3">
-
-                <div class="stat-card">
-
-                    <div class="icon bg-primary">
-
-                        <i class="bi bi-ticket"></i>
-
-                    </div>
+        <div class="stats-container">
 
 
-                    <div>
+            <div class="stat-card">
 
-                        <small>
-                            Totaal tickets
-                        </small>
+                <div class="icon bg-primary">
+
+                    <i class="bi bi-ticket"></i>
+
+                </div>
+
+                <div>
+
+                    <small>
+                        Totaal tickets
+                    </small>
+
+                    <h2>
+                        {{ stats.totaal }}
+                    </h2>
+
+                </div>
+
+            </div>
 
 
-                        <h2>
-                            {{ stats.total }}
-                        </h2>
 
-                    </div>
 
+            <div class="stat-card">
+
+                <div class="icon bg-warning">
+
+                    <i class="bi bi-hourglass-split"></i>
+
+                </div>
+
+
+                <div>
+
+                    <small>
+                        In behandeling
+                    </small>
+
+                    <h2>
+                        {{ stats.in_behandeling }}
+                    </h2>
 
                 </div>
 
@@ -56,32 +80,24 @@
 
 
 
-            <div class="col-md-3">
+            <div class="stat-card">
 
-                <div class="stat-card">
+                <div class="icon bg-success">
 
+                    <i class="bi bi-check-circle"></i>
 
-                    <div class="icon bg-warning">
-
-                        <i class="bi bi-hourglass-split"></i>
-
-                    </div>
+                </div>
 
 
-                    <div>
+                <div>
 
-                        <small>
-                            In behandeling
-                        </small>
+                    <small>
+                        Gesloten
+                    </small>
 
-
-                        <h2>
-                            {{ stats.pending }}
-                        </h2>
-
-
-                    </div>
-
+                    <h2>
+                        {{ stats.gesloten }}
+                    </h2>
 
                 </div>
 
@@ -91,76 +107,26 @@
 
 
 
+            <div class="stat-card">
 
-            <div class="col-md-3">
+                <div class="icon bg-danger">
 
-
-                <div class="stat-card">
-
-
-                    <div class="icon bg-success">
-
-                        <i class="bi bi-check-circle"></i>
-
-                    </div>
-
-
-                    <div>
-
-                        <small>
-                            Gesloten
-                        </small>
-
-
-                        <h2>
-                            {{ stats.closed }}
-                        </h2>
-
-
-                    </div>
-
+                    <i class="bi bi-exclamation-triangle"></i>
 
                 </div>
 
 
-            </div>
+                <div>
 
+                    <small>
+                        Hoge prioriteit
+                    </small>
 
-
-
-
-
-
-            <div class="col-md-3">
-
-
-                <div class="stat-card">
-
-
-                    <div class="icon bg-danger">
-
-                        <i class="bi bi-exclamation-triangle"></i>
-
-                    </div>
-
-
-                    <div>
-
-                        <small>
-                            Hoge prioriteit
-                        </small>
-
-
-                        <h2>
-                            {{ stats.high }}
-                        </h2>
-
-
-                    </div>
-
+                    <h2>
+                        {{ stats.hoge_prioriteit }}
+                    </h2>
 
                 </div>
-
 
             </div>
 
@@ -171,111 +137,44 @@
 
 
 
+        <!-- Ticket status grafiek -->
+
+
         <!-- Recente tickets -->
 
-
-        <div class="card">
-
-
-            <div class="card-header">
-
-                <h4 class="mb-0">
-                    Recente tickets
-                </h4>
-
-            </div>
+<div class="card">
 
 
+    <div class="tickets-title">
 
-            <div class="card-body">
+    <h4 class="mb-0">
+        Recente tickets
+    </h4>
 
-
-                <table class="table align-middle">
-
-
-                    <thead>
-
-                        <tr>
-
-                            <th>
-                                Titel
-                            </th>
-
-                            <th>
-                                Status
-                            </th>
-
-                            <th>
-                                Prioriteit
-                            </th>
-
-                            <th>
-                                Gebruiker
-                            </th>
-
-
-                        </tr>
-
-
-                    </thead>
+</div>
 
 
 
-                    <tbody>
+    <div class="card-body">
 
 
-                        <tr
-                            v-for="ticket in tickets"
-                            :key="ticket.id"
-                        >
+        <div class="ticket-grid">
 
 
-                            <td>
-
-                                {{ ticket.title }}
-
-                            </td>
-
-
-
-                            <td>
-
-                                <span
-                                    class="badge"
-                                    :class="statusClass(ticket.status)"
-                                >
-
-                                    {{ ticket.status }}
-
-                                </span>
+            <div
+                v-for="ticket in tickets"
+                :key="ticket.id"
+                class="ticket-item"
+            >
 
 
-                            </td>
+                <TicketCard
 
+                    :ticket="ticket"
 
+                    @open="openTicket"
 
-                            <td>
-
-                                {{ ticket.priority }}
-
-                            </td>
-
-
-
-                            <td>
-
-                                {{ ticket.user?.name }}
-
-                            </td>
-
-
-                        </tr>
-
-
-                    </tbody>
-
-
-                </table>
+                />
 
 
             </div>
@@ -285,175 +184,477 @@
 
 
     </div>
+    </div>
+
+
+
+</div>
 
 
 </template>
 
 
 
+
+
 <script setup lang="ts">
 
+
 import { ref, onMounted } from 'vue'
+
+import { useRouter } from 'vue-router'
+
 import api from '../api/axios'
 
+import TicketStatusChart from '../components/TicketStatusChart.vue'
 
-const tickets = ref<any[]>([])
+import TicketCard from '../components/TicketCard.vue'
+
+
+
+const router = useRouter()
+
+
+
+
+interface Ticket {
+
+
+    id:number
+
+    title:string
+
+    status:string
+
+    priority:string
+
+
+    user?:{
+
+        name:string
+
+    }
+
+
+    category?:{
+
+        name:string
+
+    }
+
+
+}
+
+
+
+
+
+interface DashboardData {
+
+
+    totaal:number
+
+    open:number
+
+    in_behandeling:number
+
+    gesloten:number
+
+    hoge_prioriteit:number
+
+
+    tickets:Ticket[]
+
+
+    status_overzicht:{
+
+
+        open:number
+
+        in_behandeling:number
+
+        gesloten:number
+
+
+    }
+
+
+}
+
+
+
+
+const tickets = ref<Ticket[]>([])
+
 
 
 const stats = ref({
 
-    total:0,
 
-    pending:0,
+    totaal:0,
 
-    closed:0,
+    open:0,
 
-    high:0
+    in_behandeling:0,
+
+    gesloten:0,
+
+    hoge_prioriteit:0
+
 
 })
+
+
+
+const dashboard = ref<DashboardData | null>(null)
+
+
+
+const loading = ref(true)
+
+
+
+const error = ref('')
+
+
+
 
 
 
 async function loadDashboard(){
 
 
-    const response = await api.get('/tickets')
+    try {
 
 
-    tickets.value = response.data.tickets
+        const response = await api.get('/dashboard')
 
 
-
-    stats.value.total =
-        tickets.value.length
-
-
-
-    stats.value.pending =
-        tickets.value.filter(
-            t => t.status === 'In behandeling'
-        ).length
+        const data = response.data
 
 
 
-    stats.value.closed =
-        tickets.value.filter(
-            t => t.status === 'Gesloten'
-        ).length
+        dashboard.value = data
 
 
 
-    stats.value.high =
-        tickets.value.filter(
-            t => t.priority === 'Hoog'
-        ).length
+        stats.value = {
 
 
-}
+            totaal:data.totaal,
+
+            open:data.open,
+
+            in_behandeling:data.in_behandeling,
+
+            gesloten:data.gesloten,
+
+            hoge_prioriteit:data.hoge_prioriteit
+
+
+        }
 
 
 
-function statusClass(status:string){
+        tickets.value = data.tickets
 
 
-    switch(status){
+
+    }
+    catch{
 
 
-        case 'Open':
-
-            return 'bg-primary'
-
-
-        case 'In behandeling':
-
-            return 'bg-warning text-dark'
+        error.value =
+            'Dashboard kon niet worden geladen.'
 
 
-        case 'Gesloten':
+    }
+    finally{
 
-            return 'bg-success'
 
-
-        default:
-
-            return 'bg-secondary'
+        loading.value=false
 
 
     }
 
+
 }
+
+
+
+
+
+
+function openTicket(id:number){
+
+
+    router.push(`/tickets/${id}`)
+
+
+}
+
+
+
 
 
 
 onMounted(loadDashboard)
 
 
+
 </script>
+
+
+
+
+
 <style scoped>
 
-.stat-card{
 
-    background:white;
+.page-header {
 
-    padding:25px;
-
-    border-radius:18px;
 
     display:flex;
 
+    justify-content:space-between;
+
     align-items:center;
 
-    gap:20px;
+
+    background:linear-gradient(
+        135deg,
+        #0d6efd,
+        #3b82f6
+    );
+
+
+    color:white;
+
+
+    padding:30px;
+
+
+    border-radius:16px;
+
+
+    margin-bottom:30px;
+
 
     box-shadow:
-        0 8px 24px rgba(0,0,0,.08);
+        0 8px 24px rgba(13,110,253,.25);
+
 
 }
 
 
 
-.stat-card h2{
+.page-header p{
+
+
+    color:rgba(255,255,255,.8);
+
+
+}
+
+
+
+
+
+.stats-container {
+
+
+    display:flex;
+
+
+    justify-content:center;
+
+
+    gap:20px;
+
+
+    flex-wrap:wrap;
+
+
+    margin-bottom:30px;
+
+
+}
+
+
+
+
+
+.stat-card {
+
+
+    display:flex;
+
+
+    align-items:center;
+
+
+    gap:16px;
+
+
+    width:250px;
+
+
+    padding:20px;
+
+
+    background:white;
+
+
+    border-radius:16px;
+
+
+    box-shadow:
+        0 8px 24px rgba(0,0,0,.08);
+
+
+}
+
+
+
+
+
+.stat-card h2 {
+
 
     margin:5px 0 0;
+
+
+    font-weight:700;
+
+
+}
+
+
+
+
+.icon {
+
+
+    width:48px;
+
+
+    height:48px;
+
+
+    border-radius:12px;
+
+
+    display:flex;
+
+
+    align-items:center;
+
+
+    justify-content:center;
+
+
+    color:white;
+
+
+    font-size:22px;
+
+
+}
+
+
+
+
+.card {
+
+
+    border:none;
+
+
+    border-radius:16px;
+
+
+    box-shadow:
+        0 8px 24px rgba(0,0,0,.08);
+
+
+}
+
+
+
+
+.card-header {
+
+
+    background:#2563eb;
+
+
+    color:white;
+
+
+    border-radius:16px 16px 0 0 !important;
+
+
+    padding:18px;
+
+
+}
+
+
+
+
+.ticket-grid {
+
+
+    row-gap:25px;
+
+
+}
+
+.ticket-grid {
+
+    display:grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap:25px;
+
+}
+
+
+
+.ticket-item {
+
+    width:100%;
+
+}
+
+
+
+/* Tablet */
+
+@media(max-width: 992px){
+
+    .ticket-grid {
+
+        grid-template-columns:1fr;
+
+    }
+
+    
+    .tickets-title {
+
+    padding:20px 24px;
+
+    background:white;
+
+    border-radius:16px 16px 0 0;
 
     font-weight:700;
 
 }
-
-
-
-.icon{
-
-    width:55px;
-
-    height:55px;
-
-    border-radius:14px;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    color:white;
-
-    font-size:25px;
-
 }
 
 
-
-.card{
-
-    border:none;
-
-    border-radius:16px;
-
-    box-shadow:
-        0 8px 24px rgba(0,0,0,.08);
-
-}
 
 
 </style>

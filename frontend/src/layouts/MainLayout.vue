@@ -7,13 +7,27 @@
 
         <header class="topbar">
 
-            <div>
+
+            <!-- Logo links -->
+
+            <div class="header-logo">
+
+                <i class="bi bi-life-preserver"></i>
+
+            </div>
+
+
+
+
+            <!-- Titel midden -->
+
+            <div class="header-title">
 
                 <h4 class="mb-0 fw-bold">
                     Klantenhulpportaal
                 </h4>
 
-                <small class="text-muted">
+                <small>
                     Ticketbeheer & klantenondersteuning
                 </small>
 
@@ -21,10 +35,13 @@
 
 
 
-            <div class="d-flex align-items-center">
+
+            <!-- Acties rechts -->
+
+            <div class="header-actions">
 
 
-                <button class="btn btn-light me-3">
+                <button class="btn btn-light notification-btn">
 
                     <i class="bi bi-bell"></i>
 
@@ -52,7 +69,7 @@
                         </div>
 
 
-                        <small class="text-muted">
+                        <small>
 
                             {{ authStore.user?.role }}
 
@@ -67,7 +84,7 @@
 
 
                 <button
-                    class="btn btn-danger ms-4"
+                    class="btn btn-danger logout-btn"
                     @click="logout"
                 >
 
@@ -87,7 +104,9 @@
 
 
 
+
         <div class="body-layout">
+
 
 
             <!-- Sidebar -->
@@ -110,6 +129,7 @@
 
 
 
+
                 <nav>
 
 
@@ -123,6 +143,7 @@
                         Dashboard
 
                     </RouterLink>
+
 
 
 
@@ -141,6 +162,7 @@
 
 
 
+
                     <RouterLink
                         v-if="authStore.user?.role === 'admin'"
                         class="menu-item"
@@ -152,6 +174,7 @@
                         Categorieën
 
                     </RouterLink>
+
 
 
 
@@ -179,7 +202,10 @@
 
 
 
+
+
             <!-- Pagina inhoud -->
+
 
             <main class="content">
 
@@ -200,7 +226,9 @@
 
 
 
+
 <script setup lang="ts">
+
 
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
@@ -214,13 +242,18 @@ const authStore = useAuthStore()
 
 async function logout(){
 
+
     await authStore.logout()
+
 
     router.push('/login')
 
+
 }
 
+
 </script>
+
 
 
 
@@ -241,24 +274,167 @@ async function logout(){
 
 
 
+
+/* HEADER */
+
+
 .topbar{
 
-    height:90px;
+    display:grid;
 
-    background:white;
-
-    padding:20px 35px;
-
-    display:flex;
-
-    justify-content:space-between;
+    grid-template-columns:1fr auto 1fr;
 
     align-items:center;
 
-    box-shadow:0 3px 12px rgba(0,0,0,.08);
+    background:linear-gradient(
+        135deg,
+        #0d6efd,
+        #2563eb
+    );
+
+    color:white;
+
+    padding:20px 30px;
+
+    box-shadow:
+        0 4px 15px rgba(0,0,0,.15);
 
 }
 
+
+
+.header-logo{
+
+    display:flex;
+
+    align-items:center;
+
+}
+
+
+
+.header-logo i{
+
+    font-size:45px;
+
+}
+
+
+
+.header-title{
+
+    text-align:center;
+
+}
+
+
+
+.header-title small{
+
+    color:rgba(255,255,255,.75);
+
+}
+
+
+
+
+.header-actions{
+
+    justify-self:end;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:20px;
+
+}
+
+
+
+
+
+.notification-btn{
+
+    width:45px;
+
+    height:45px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
+
+
+
+
+
+.user-card{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+}
+
+
+
+.user-card small{
+
+    color:rgba(255,255,255,.75);
+
+}
+
+
+
+
+.avatar{
+
+    width:46px;
+
+    height:46px;
+
+    border-radius:50%;
+
+    background:#1d4ed8;
+
+    color:white;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-weight:bold;
+
+    font-size:20px;
+
+}
+
+
+
+
+.logout-btn{
+
+    border-radius:12px;
+
+    padding:10px 18px;
+
+}
+
+
+
+
+
+/* LAYOUT */
 
 
 .body-layout{
@@ -268,6 +444,7 @@ async function logout(){
     flex:1;
 
 }
+
 
 
 
@@ -282,6 +459,8 @@ async function logout(){
     padding:25px;
 
 }
+
+
 
 
 
@@ -300,6 +479,7 @@ async function logout(){
     margin-bottom:30px;
 
 }
+
 
 
 
@@ -337,6 +517,7 @@ async function logout(){
 
 
 
+
 .router-link-active{
 
     background:#2563eb;
@@ -344,6 +525,8 @@ async function logout(){
     color:white;
 
 }
+
+
 
 
 
@@ -355,6 +538,8 @@ async function logout(){
 
 
 
+
+
 .content{
 
     flex:1;
@@ -363,43 +548,6 @@ async function logout(){
 
 }
 
-
-
-.user-card{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:15px;
-
-}
-
-
-
-.avatar{
-
-    width:46px;
-
-    height:46px;
-
-    border-radius:50%;
-
-    background:#2563eb;
-
-    color:white;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    font-weight:bold;
-
-    font-size:20px;
-
-}
 
 
 </style>

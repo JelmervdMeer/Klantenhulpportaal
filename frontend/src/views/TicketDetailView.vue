@@ -1,61 +1,87 @@
 <template>
 
-<div class="container mt-4">
+<div class="container-fluid">
 
+
+    <!-- Laden -->
 
     <div
         v-if="loading"
         class="alert alert-info"
     >
+
         Ticket laden...
+
     </div>
+
 
 
     <div
         v-if="error"
         class="alert alert-danger"
     >
+
         {{ error }}
+
     </div>
+
 
 
 
     <div v-if="ticket">
 
 
-        <!-- Header -->
+        <!-- Pagina header -->
 
-        <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div class="page-header mb-4">
+
 
             <div>
 
+
                 <button
-                    class="btn btn-outline-secondary mb-3"
+                    class="btn btn-light back-btn mb-3"
                     @click="$router.back()"
                 >
-                    <i class="bi bi-arrow-left"></i>
+
+                    <i class="bi bi-arrow-left me-2"></i>
+
                     Terug
+
                 </button>
 
 
+
+
                 <h1 class="fw-bold mb-1">
+
                     {{ ticket.title }}
+
                 </h1>
 
 
-                <small class="text-muted">
+
+                <p class="mb-0">
+
                     Ticket #{{ ticket.id }}
-                </small>
+
+                </p>
+
 
             </div>
 
 
 
+
+
             <span
-                class="badge fs-6"
+                class="badge status-large"
                 :class="statusClass(ticket.status)"
             >
+
                 {{ ticket.status }}
+
             </span>
 
 
@@ -64,194 +90,255 @@
 
 
 
+
+
+
         <div class="row g-4">
 
 
-            <!-- Linker kolom -->
+
+            <!-- Linkerkant -->
+
 
             <div class="col-lg-4">
 
 
-                <div class="card">
 
-                    <div class="card-body">
-
-
-                        <h4 class="mb-4">
-                            Ticket informatie
-                        </h4>
+                <div class="ticket-info-card">
 
 
 
-                        <p>
+                    <h4 class="fw-bold mb-4">
 
-                            <strong>Status</strong>
+                        Ticket informatie
 
-                        </p>
+                    </h4>
+
+
+
+
+                    <div class="info-item">
+
+                        <strong>Status</strong>
 
 
                         <span
                             class="badge"
                             :class="statusClass(ticket.status)"
                         >
+
                             {{ ticket.status }}
+
                         </span>
 
 
+                    </div>
 
-                        <div
-                            v-if="authStore.user?.role === 'admin'"
-                            class="mt-3"
+
+
+
+
+                    <div
+                        v-if="authStore.user?.role === 'admin'"
+                        class="mt-3"
+                    >
+
+
+                        <select
+                            v-model="selectedStatus"
+                            class="form-select"
+                            @change="updateStatus"
                         >
 
-                            <select
-                                v-model="selectedStatus"
-                                class="form-select"
-                                @change="updateStatus"
-                            >
+                            <option value="Open">
+                                Open
+                            </option>
 
-                                <option value="Open">
-                                    Open
-                                </option>
 
-                                <option value="In behandeling">
-                                    In behandeling
-                                </option>
+                            <option value="In behandeling">
+                                In behandeling
+                            </option>
 
-                                <option value="Gesloten">
-                                    Gesloten
-                                </option>
 
-                            </select>
+                            <option value="Gesloten">
+                                Gesloten
+                            </option>
 
-                        </div>
+
+                        </select>
+
+
+                    </div>
 
 
 
 
-                        <hr>
+
+                    <hr>
 
 
 
-                        <p>
 
-                            <strong>Prioriteit</strong>
 
-                        </p>
+                    <div class="info-item">
+
+
+                        <strong>
+                            Prioriteit
+                        </strong>
+
 
 
                         <span
                             class="badge"
                             :class="priorityClass(ticket.priority)"
                         >
+
                             {{ ticket.priority }}
+
                         </span>
-
-
-
-                        <div
-                            v-if="authStore.user?.role === 'admin'"
-                            class="mt-3"
-                        >
-
-                            <select
-                                v-model="selectedPriority"
-                                class="form-select"
-                                @change="updatePriority"
-                            >
-
-                                <option value="Laag">
-                                    Laag
-                                </option>
-
-                                <option value="Normaal">
-                                    Normaal
-                                </option>
-
-                                <option value="Hoog">
-                                    Hoog
-                                </option>
-
-                            </select>
-
-                        </div>
-
-
-
-
-                        <hr>
-
-
-
-                        <p>
-
-                            <strong>Categorie</strong><br>
-
-                            {{ ticket.category?.name }}
-
-                        </p>
-
-
-
-                        <p>
-
-                            <strong>Aangemaakt door</strong><br>
-
-                            {{ ticket.user?.name }}
-
-                        </p>
-
-
-
-                        <p>
-
-                            <strong>Toegewezen aan</strong><br>
-
-                            {{ ticket.assignedAdmin?.name ?? 'Nog niet toegewezen' }}
-
-                        </p>
-
-
-
-
-                        <div
-                            v-if="authStore.user?.role === 'admin'"
-                            class="mt-3"
-                        >
-
-                            <select
-                                v-model="selectedAdmin"
-                                class="form-select"
-                                @change="assignAdmin"
-                            >
-
-                                <option :value="null">
-                                    Niet toegewezen
-                                </option>
-
-
-                                <option
-                                    v-for="admin in admins"
-                                    :key="admin.id"
-                                    :value="admin.id"
-                                >
-
-                                    {{ admin.name }}
-
-                                </option>
-
-
-                            </select>
-
-
-                        </div>
-
 
 
                     </div>
 
-                </div>
 
+
+
+
+                    <div
+                        v-if="authStore.user?.role === 'admin'"
+                        class="mt-3"
+                    >
+
+
+                        <select
+                            v-model="selectedPriority"
+                            class="form-select"
+                            @change="updatePriority"
+                        >
+
+                            <option value="Laag">
+                                Laag
+                            </option>
+
+
+                            <option value="Normaal">
+                                Normaal
+                            </option>
+
+
+                            <option value="Hoog">
+                                Hoog
+                            </option>
+
+
+                        </select>
+
+
+                    </div>
+
+
+
+
+
+                    <hr>
+
+
+
+
+                    <div class="info-text">
+
+
+                        <strong>
+                            Categorie
+                        </strong>
+
+                        <p>
+                            {{ ticket.category?.name }}
+                        </p>
+
+
+                    </div>
+
+
+
+
+                    <div class="info-text">
+
+
+                        <strong>
+                            Aangemaakt door
+                        </strong>
+
+
+                        <p>
+                            {{ ticket.user?.name }}
+                        </p>
+
+
+                    </div>
+
+
+
+
+                    <div class="info-text">
+
+
+                        <strong>
+                            Toegewezen aan
+                        </strong>
+
+
+                        <p>
+                            {{ ticket.assignedAdmin?.name ?? 'Nog niet toegewezen' }}
+                        </p>
+
+
+                    </div>
+
+
+
+
+
+                    <div
+                        v-if="authStore.user?.role === 'admin'"
+                    >
+
+
+                        <select
+                            v-model="selectedAdmin"
+                            class="form-select"
+                            @change="assignAdmin"
+                        >
+
+
+                            <option :value="null">
+
+                                Niet toegewezen
+
+                            </option>
+
+
+
+                            <option
+                                v-for="admin in admins"
+                                :key="admin.id"
+                                :value="admin.id"
+                            >
+
+                                {{ admin.name }}
+
+                            </option>
+
+
+                        </select>
+
+
+                    </div>
+
+
+
+                </div>
 
 
             </div>
@@ -1363,5 +1450,223 @@ textarea {
 
 }
 
+.page-header {
+
+    background:linear-gradient(
+        135deg,
+        #0d6efd,
+        #2563eb
+    );
+
+    color:white;
+
+    padding:30px;
+
+    border-radius:18px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    box-shadow:
+        0 8px 24px rgba(0,0,0,.15);
+
+}
+
+
+
+.page-header p {
+
+    color:rgba(255,255,255,.8);
+
+}
+
+
+
+.back-btn {
+
+    border-radius:12px;
+
+    font-weight:600;
+
+}
+
+
+
+.ticket-info-card,
+.card {
+
+
+    background:white;
+
+    border:none;
+
+    border-radius:18px;
+
+    padding:25px;
+
+    box-shadow:
+        0 8px 24px rgba(0,0,0,.08);
+
+}
+
+
+
+.info-item {
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:10px;
+
+}
+
+
+
+.info-text {
+
+    margin-bottom:18px;
+
+}
+
+
+
+.info-text p {
+
+    margin-top:5px;
+
+    color:#64748b;
+
+}
+
+
+
+.badge {
+
+    width:max-content;
+
+    padding:8px 14px;
+
+    border-radius:12px;
+
+}
+
+
+
+.status-large {
+
+    font-size:16px;
+
+}
+
+
+
+
+
+.form-select,
+.form-control {
+
+    border-radius:12px;
+
+}
+
+
+
+.btn {
+
+    border-radius:12px;
+
+}
+
+
+
+
+.reaction-item {
+
+
+    display:flex;
+
+    gap:15px;
+
+    padding:18px;
+
+
+    background:#f8fafc;
+
+
+    border-radius:14px;
+
+
+    border-left:4px solid #2563eb;
+
+
+    margin-bottom:15px;
+
+
+}
+
+
+
+.reaction-avatar {
+
+
+    width:45px;
+
+    height:45px;
+
+
+    border-radius:50%;
+
+
+    background:#2563eb;
+
+    color:white;
+
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+
+    font-weight:bold;
+
+
+}
+
+
+
+.note-item {
+
+
+    background:#fff7ed;
+
+
+    border-left:4px solid #f97316;
+
+
+    padding:18px;
+
+
+    border-radius:14px;
+
+
+}
+
+
+
+textarea {
+
+    resize:none;
+
+}
+
+
 
 </style>
+
+
