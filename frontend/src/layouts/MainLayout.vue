@@ -468,10 +468,19 @@ async function logout(){
 
     margin:0 auto 20px;
 
-    background:white;
+
+    background:linear-gradient(
+        135deg,
+        #ffffff,
+        #dbeafe
+    );
+
+
+    color:#2563eb;
 
 
     border-radius:50%;
+
 
     display:flex;
 
@@ -479,7 +488,14 @@ async function logout(){
 
     justify-content:center;
 
-    animation: logoPulse 4s ease-in-out infinite;
+
+    box-shadow:
+        0 0 0 0 rgba(255,255,255,.6);
+
+
+    animation:
+        logoPulse 3s infinite;
+
 
 }
 
@@ -491,34 +507,39 @@ async function logout(){
 
     color:#2563eb;
 
-    animation: iconColor 4s ease-in-out infinite;
+    animation:
+        logoColor 4s infinite alternate;
 
 }
 
 
 
-/* subtiele kleurverandering */
 
-@keyframes iconColor {
+
+
+@keyframes logoPulse {
 
 
     0% {
 
-        color:#2563eb;
+        box-shadow:
+            0 0 0 0 rgba(255,255,255,.6);
 
     }
 
 
     50% {
 
-        color:#60a5fa;
+        box-shadow:
+            0 0 0 15px rgba(255,255,255,0);
 
     }
 
 
     100% {
 
-        color:#2563eb;
+        box-shadow:
+            0 0 0 0 rgba(255,255,255,0);
 
     }
 
@@ -526,12 +547,15 @@ async function logout(){
 
 
 
-/* lichte beweging */
 
-@keyframes logoPulse {
+
+
+@keyframes logoColor {
 
 
     0% {
+
+        color:#2563eb;
 
         transform:scale(1);
 
@@ -540,12 +564,16 @@ async function logout(){
 
     50% {
 
-        transform:scale(1.04);
+        color:#0d6efd;
+
+        transform:scale(1.08);
 
     }
 
 
     100% {
+
+        color:#38bdf8;
 
         transform:scale(1);
 
