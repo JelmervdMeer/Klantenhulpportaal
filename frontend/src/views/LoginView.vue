@@ -1,148 +1,152 @@
 <template>
 
-    <div class="login-page">
+<div class="login-page">
 
 
-        <div class="login-card">
+    <div class="login-card">
 
 
-            <!-- Branding -->
+        <!-- Branding -->
 
-            <div class="login-brand">
+        <div class="login-brand">
 
 
-                <div class="logo">
+            <div class="logo">
 
-                    <i class="bi bi-life-preserver"></i>
+                <i class="bi bi-life-preserver"></i>
+
+            </div>
+
+
+            <h1 class="fw-bold mb-2 text-center">
+                Klantenhulpportaal
+            </h1>
+
+
+            <p class="mb-0 text-center">
+                Ticketbeheer & klantenondersteuning
+            </p>
+
+
+        </div>
+
+
+
+
+
+        <!-- Login formulier -->
+
+        <div class="login-body">
+
+
+            <h3 class="text-center fw-bold mb-4">
+                Inloggen
+            </h3>
+
+
+
+
+            <form @submit.prevent="login">
+
+
+
+                <div class="form-group">
+
+
+                    <label class="form-label">
+                        Email
+                    </label>
+
+
+                    <input
+
+                        v-model="email"
+
+                        type="email"
+
+                        class="form-control"
+
+                        placeholder="Emailadres"
+
+                        required
+
+                    >
+
 
                 </div>
 
 
-                <h1 class="fw-bold mb-2">
-                    Klantenhulpportaal
-                </h1>
-
-
-                <p class="mb-0">
-                    Ticketbeheer & klantenondersteuning
-                </p>
-
-
-            </div>
 
 
 
 
-
-            <!-- Login formulier -->
-
-            <div class="login-body">
+                <div class="form-group">
 
 
-                <h3 class="text-center fw-bold mb-4">
+                    <label class="form-label">
+                        Wachtwoord
+                    </label>
+
+
+                    <input
+
+                        v-model="password"
+
+                        type="password"
+
+                        class="form-control"
+
+                        placeholder="Wachtwoord"
+
+                        required
+
+                    >
+
+
+                </div>
+
+
+
+
+
+
+
+                <button
+
+                    type="submit"
+
+                    class="btn btn-primary w-100 login-button"
+
+                >
+
+                    <i class="bi bi-box-arrow-in-right me-2"></i>
+
                     Inloggen
-                </h3>
 
 
-
-                <form @submit.prevent="login">
-
-
-                    <div class="mb-3">
-
-
-                        <label class="form-label">
-                            Email
-                        </label>
-
-
-                        <input
-
-                            v-model="email"
-
-                            type="email"
-
-                            class="form-control"
-
-                            placeholder="Emailadres"
-
-                            required
-
-                        >
-
-
-                    </div>
+                </button>
 
 
 
 
 
-                    <div class="mb-4">
+                <div
 
+                    v-if="error"
 
-                        <label class="form-label">
-                            Wachtwoord
-                        </label>
+                    class="alert alert-danger mt-4 mb-0"
 
+                >
 
-                        <input
+                    {{ error }}
 
-                            v-model="password"
-
-                            type="password"
-
-                            class="form-control"
-
-                            placeholder="Wachtwoord"
-
-                            required
-
-                        >
-
-
-                    </div>
+                </div>
 
 
 
 
+            </form>
 
-
-                    <button
-
-                        type="submit"
-
-                        class="btn btn-primary w-100 login-button"
-
-                    >
-
-                        <i class="bi bi-box-arrow-in-right me-2"></i>
-
-                        Inloggen
-
-
-                    </button>
-
-
-
-
-                    <div
-
-                        v-if="error"
-
-                        class="alert alert-danger mt-3 mb-0"
-
-                    >
-
-                        {{ error }}
-
-                    </div>
-
-
-
-                </form>
-
-
-            </div>
 
 
         </div>
@@ -151,7 +155,10 @@
     </div>
 
 
+</div>
+
 </template>
+
 
 
 
@@ -219,8 +226,8 @@ async function login(){
 }
 
 
-
 </script>
+
 
 
 
@@ -255,29 +262,22 @@ async function login(){
 
 
 
-
 .login-card {
 
+    width:500px;
 
-    width:420px;
-
+    max-width:95%;
 
     background:white;
 
-
     border-radius:18px;
-
 
     overflow:hidden;
 
-
     box-shadow:
-
         0 8px 24px rgba(0,0,0,.12);
 
-
 }
-
 
 
 
@@ -286,27 +286,26 @@ async function login(){
 
 
     background:linear-gradient(
-
         135deg,
-
         #0d6efd,
-
         #2563eb
-
     );
 
 
     color:white;
 
 
-    text-align:center;
-
-
     padding:35px 30px;
 
 
-}
+    display:flex;
 
+    flex-direction:column;
+
+    align-items:center;
+
+
+}
 
 
 
@@ -320,7 +319,7 @@ async function login(){
     height:70px;
 
 
-    margin:0 auto 20px;
+    margin-bottom:20px;
 
 
     background:white;
@@ -346,7 +345,6 @@ async function login(){
 
 
 
-
 .logo i {
 
 
@@ -354,7 +352,6 @@ async function login(){
 
 
 }
-
 
 
 
@@ -370,45 +367,60 @@ async function login(){
 
 
 
-
 .login-body {
 
-
     padding:35px;
-
 
 }
 
 
+.login-body form {
+
+    width:100%;
+
+    max-width:380px;
+
+    margin:0 auto;
+
+}
+
+
+
+.form-group {
+
+    margin-bottom:25px;
+
+}
 
 
 
 .form-label {
 
+    display:block;
 
     font-weight:600;
 
+    margin-bottom:8px;
 
 }
-
-
 
 
 
 .form-control {
 
+    width:100%;
+
+    box-sizing:border-box;
 
     border-radius:12px;
 
-
-    padding:12px 15px;
-
+    padding:13px 15px;
 
     border:1px solid #dbe3ef;
 
+    font-size:15px;
 
 }
-
 
 
 
@@ -420,7 +432,6 @@ async function login(){
 
 
     box-shadow:
-
         0 0 0 .2rem rgba(37,99,235,.15);
 
 
@@ -429,11 +440,10 @@ async function login(){
 
 
 
-
 .login-button {
 
 
-    padding:12px;
+    padding:13px;
 
 
     border-radius:12px;
@@ -446,8 +456,6 @@ async function login(){
 
 
 }
-
-
 
 </style>
 
