@@ -649,6 +649,94 @@ async function logout(){
 
 }
 
+/* Algemene knopstijl */
+
+.btn {
+    border-radius: 12px;
+    font-weight: 600;
+    padding: 10px 22px;
+    transition: all .25s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,.08);
+}
+
+/* Hover */
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(0,0,0,.15);
+}
+
+/* Primary */
+
+.btn-primary {
+    background: linear-gradient(135deg,#0d6efd,#2563eb);
+    border: none;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg,#2563eb,#1d4ed8);
+}
+
+/* Success */
+
+.btn-success {
+    background: linear-gradient(135deg,#22c55e,#16a34a);
+    border: none;
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg,#16a34a,#15803d);
+}
+
+/* Danger */
+
+.btn-danger {
+    background: linear-gradient(135deg,#ef4444,#dc2626);
+    border: none;
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg,#dc2626,#b91c1c);
+}
+
+/* Warning */
+
+.btn-warning {
+    background: linear-gradient(135deg,#f59e0b,#d97706);
+    border: none;
+    color: white;
+}
+
+.btn-warning:hover {
+    background: linear-gradient(135deg,#d97706,#b45309);
+    color: white;
+}
+
+/* Secondary */
+
+.btn-secondary {
+    background: #64748b;
+    border: none;
+}
+
+.btn-secondary:hover {
+    background: #475569;
+}
+
+/* Outline */
+
+.btn-outline-secondary {
+    border: 2px solid #cbd5e1;
+    color: #475569;
+    background: white;
+}
+
+.btn-outline-secondary:hover {
+    background: #f8fafc;
+    border-color: #94a3b8;
+    color: #1e293b;
+}
+
 
 
 </style>

@@ -29,9 +29,9 @@
             class="btn btn-light new-ticket-btn"
         >
 
-            <i class="bi bi-plus-circle me-2"></i>
+            <i class="bi bi-plus-circle me-2 plus-icon"></i>
 
-            Nieuw ticket
+            
 
         </RouterLink>
 
@@ -51,7 +51,7 @@
         <div class="card-body">
 
 
-            <div class="row g-3">
+            <div class="row g-3 filter-row">
 
 
                 <div class="col-md-4">
@@ -562,5 +562,22 @@ onMounted(loadTickets)
 
 
 }
+
+.plus-icon {
+
+    font-size: 28px;
+    color: white;
+
+}
+
+.filter-row{
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+    font-size: 18px;
+}
+
+
 
 </style>

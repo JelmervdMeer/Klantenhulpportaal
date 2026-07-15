@@ -139,6 +139,29 @@
 
         <!-- Ticket status grafiek -->
 
+        <div
+    v-if="dashboard"
+    class="card mb-4"
+>
+
+    <div class="tickets-title">
+
+        <h4 class="mb-0">
+            Ticketstatus overzicht
+        </h4>
+
+    </div>
+
+    <div class="card-body">
+
+        <TicketStatusChart
+            :data="dashboard.status_overzicht"
+        />
+
+    </div>
+
+</div>
+
 
         <!-- Recente tickets -->
 

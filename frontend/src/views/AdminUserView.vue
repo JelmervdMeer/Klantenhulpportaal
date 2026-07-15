@@ -313,119 +313,106 @@ onMounted(loadUsers)
         >
 
 
-            <div class="user-card">
+           <div class="user-card">
 
+    <div class="user-content">
 
-                <div class="user-icon">
+        <!-- Linkerkant -->
+        <div class="user-left">
 
-                    <i class="bi bi-person"></i>
+           <div class="user-actions">
 
-                </div>
+    <button
+        class="action-btn edit-btn"
+        @click="editUser(user)"
+    >
+        <i class="bi bi-pencil-square"></i>
 
+        <span>Bewerken</span>
+    </button>
 
+    <button
+        class="action-btn delete-btn"
+        @click="deleteUser(user.id)"
+    >
+        <i class="bi bi-trash3"></i>
 
+        <span>Verwijderen</span>
+    </button>
 
-                <h4 class="fw-bold">
+</div>
 
-                    {{ user.name }}
+        </div>
 
-                </h4>
+        <!-- Midden -->
+        <div class="user-info">
 
+            <h4 class="fw-bold mb-2">
+                {{ user.name }}
+            </h4>
 
+            <p class="text-muted mb-2">
+                <i class="bi bi-envelope me-2"></i>
+                {{ user.email }}
+            </p>
 
+            <span
+                class="role-badge"
+                :class="user.role === 'admin'
+                    ? 'admin'
+                    : 'user'"
+            >
+                <i class="bi bi-shield me-1"></i>
 
-                <p class="text-muted mb-2">
+                {{ user.role === 'admin'
+                    ? 'Administrator'
+                    : 'Gebruiker'
+                }}
+            </span>
 
-                    <i class="bi bi-envelope me-2"></i>
+            <select
+                v-model="user.role"
+                class="form-select mt-4"
+                @change="updateRole(user)"
+            >
+                <option value="user">
+                    Gebruiker
+                </option>
 
-                    {{ user.email }}
+                <option value="admin">
+                    Administrator
+                </option>
 
-                </p>
+            </select>
 
+        </div>
 
+        <!-- Rechterkant -->
+        <div class="user-photo">
 
+            <div class="user-avatar">
 
+                <i class="bi bi-person-fill"></i>
 
-                <div class="mb-3">
+            </div>
 
+        </div>
 
-                    <span
-                        class="role-badge"
-                        :class="user.role === 'admin'
-                            ? 'admin'
-                            : 'user'"
-                    >
+    </div>
 
-                        <i class="bi bi-shield me-1"></i>
-
-                        {{ user.role === 'admin'
-                            ? 'Administrator'
-                            : 'Gebruiker'
-                        }}
-
-                    </span>
-
-
-                </div>
-
-
-
-
-
-
-                <div class="user-actions">
-
-
-                    <button
-                        class="btn btn-warning btn-sm"
-                        @click="editUser(user)"
-                    >
-
-                        <i class="bi bi-pencil me-1"></i>
-
-                        Bewerken
-
-                    </button>
-
-
-
-
-
-                    <button
-                        class="btn btn-danger btn-sm"
-                        @click="deleteUser(user.id)"
-                    >
-
-                        <i class="bi bi-trash me-1"></i>
-
-                        Verwijderen
-
-                    </button>
-
-
-                </div>
+</div>
 
 
 
 
 
-                <select
-                    v-model="user.role"
-                    class="form-select mt-3"
-                    @change="updateRole(user)"
-                >
 
-                    <option value="user">
-                        Gebruiker
-                    </option>
+                
 
 
-                    <option value="admin">
-                        Administrator
-                    </option>
 
 
-                </select>
+            
 
 
             </div>
@@ -438,7 +425,7 @@ onMounted(loadUsers)
 
 
 
-</div>
+
 
 </template>
 <style scoped>
@@ -519,130 +506,225 @@ onMounted(loadUsers)
 }
 
 
-
-
 .user-card {
 
+    background: white;
 
-    background:white;
+    border-radius: 18px;
 
-    padding:25px;
-
-    border-radius:18px;
-
-    height:100%;
-
+    padding: 24px;
 
     box-shadow:
         0 8px 24px rgba(0,0,0,.08);
 
-
-    transition:.25s;
+    transition: .25s;
 
 }
 
-
-
 .user-card:hover {
 
-
-    transform:translateY(-5px);
-
+    transform: translateY(-5px);
 
     box-shadow:
         0 14px 30px rgba(0,0,0,.15);
 
+}
+
+.user-content {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 30px;
+
+}
+
+.user-left {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
 
 }
 
 
+.user-info {
 
-
-.user-icon {
-
-
-    width:50px;
-
-    height:50px;
-
-    border-radius:14px;
-
-
-    background:#dbeafe;
-
-    color:#2563eb;
-
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-
-    font-size:24px;
-
-    margin-bottom:18px;
-
+    flex: 1;
 
 }
 
+.user-photo {
 
+    display: flex;
 
+    justify-content: center;
 
+    align-items: center;
+
+}
+
+.user-avatar {
+
+    width: 90px;
+
+    height: 90px;
+
+    border-radius: 50%;
+
+    background: linear-gradient(
+        135deg,
+        #0d6efd,
+        #2563eb
+    );
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 42px;
+
+    box-shadow:
+        0 8px 20px rgba(37,99,235,.25);
+
+}
 
 .role-badge {
 
+    display: inline-block;
 
-    padding:8px 14px;
+    padding: 8px 14px;
 
-    border-radius:12px;
+    border-radius: 12px;
 
-    font-size:14px;
+    font-size: 14px;
 
-    font-weight:600;
-
+    font-weight: 600;
 
 }
-
-
 
 .role-badge.admin {
 
+    background: #fee2e2;
 
-    background:#fee2e2;
-
-    color:#dc2626;
-
+    color: #dc2626;
 
 }
-
-
 
 .role-badge.user {
 
+    background: #dcfce7;
 
-    background:#dcfce7;
-
-    color:#16a34a;
-
+    color: #16a34a;
 
 }
-
-
-
-
 
 .user-actions {
 
+    display: flex;
 
-    display:flex;
+    flex-direction: column;
 
-    gap:10px;
+    gap: 14px;
 
-    margin-top:20px;
-
+    width: 150px;
 
 }
+
+.action-btn {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    width: 100%;
+
+    padding: 12px;
+
+    border: none;
+
+    border-radius: 14px;
+
+    font-weight: 600;
+
+    transition: .25s;
+
+    cursor: pointer;
+
+}
+
+.user-actions {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 14px;
+
+    width: 150px;
+
+}
+
+.action-btn {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    width: 100%;
+
+    padding: 12px;
+
+    background: white;
+
+    border: 2px solid #2563eb;
+
+    color: #2563eb;
+
+    border-radius: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: all .25s ease;
+
+}
+
+.action-btn i {
+
+    font-size: 18px;
+
+}
+
+.action-btn:hover {
+
+    background: #2563eb;
+
+    color: white;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 8px 18px rgba(37,99,235,.25);
+
+}
+
+
+
 
 </style>
