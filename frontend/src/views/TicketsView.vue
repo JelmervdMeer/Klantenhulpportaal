@@ -5,38 +5,24 @@
 
     <!-- Pagina header -->
 
-    <div class="page-header mb-4">
+ <PageHeader
+    title="Mijn tickets"
+    subtitle="Overzicht van jouw hulpvragen en de actuele status."
+>
 
+    <RouterLink
+        to="/tickets/create"
+        class="btn btn-primary"
+    >
+        <i class="bi bi-plus-circle me-2"></i>
+        Nieuw ticket
+    </RouterLink>
 
-        <div>
-
-            <h1 class="fw-bold mb-1">
-                Mijn tickets
-            </h1>
-
-
-            <p class="mb-0">
-                Beheer en volg jouw hulpvragen
-            </p>
-
-
-        </div>
+</PageHeader>
 
 
 
-        <RouterLink
-            to="/tickets/create"
-            class="btn btn-light new-ticket-btn"
-        >
-
-            <i class="bi bi-plus-circle me-2 plus-icon"></i>
-
-            
-
-        </RouterLink>
-
-
-    </div>
+   
 
 
 
@@ -214,14 +200,17 @@
 
 
 
-    <div
-        v-if="!loading && !tickets.length && !error"
-        class="alert alert-warning mt-4"
-    >
+   <EmptyState
 
-        Geen tickets gevonden.
+    v-if="!loading && !tickets.length && !error"
 
-    </div>
+    icon="bi-ticket-perforated"
+
+    title="Geen tickets gevonden"
+
+    text="Er zijn nog geen hulpvragen beschikbaar."
+
+/>
 
 
 </div>
@@ -251,6 +240,10 @@ import api from '../api/axios'
 
 
 import TicketCard from '../components/TicketCard.vue'
+
+import PageHeader from '../components/PageHeader.vue'
+
+import EmptyState from '../components/EmptyState.vue'
 
 
 
@@ -463,12 +456,7 @@ onMounted(loadTickets)
 .page-header {
 
 
-    background:linear-gradient(
-        135deg,
-        #0d6efd,
-        #2563eb
-    );
-
+   
 
     color:white;
 
@@ -498,7 +486,7 @@ onMounted(loadTickets)
 
 .page-header p {
 
-    color:rgba(255,255,255,.8);
+    color:blue
 
 }
 
@@ -514,6 +502,8 @@ onMounted(loadTickets)
 
 
     font-weight:600;
+
+    color:blue
 
 
 }
@@ -566,7 +556,7 @@ onMounted(loadTickets)
 .plus-icon {
 
     font-size: 28px;
-    color: white;
+    color: #2563eb;
 
 }
 
@@ -576,6 +566,10 @@ onMounted(loadTickets)
     margin-bottom: 2rem;
     margin-top: 2rem;
     font-size: 18px;
+}
+
+.subtitle{
+    color: blue;
 }
 
 

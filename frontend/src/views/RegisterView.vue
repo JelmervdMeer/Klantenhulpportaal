@@ -2,176 +2,107 @@
 
 <div class="container-fluid">
 
-
-    <!-- Pagina header -->
-
-
-    <div class="page-header mb-4">
-
-
-        <div>
-
-
-            <h1 class="fw-bold mb-1">
-
-                Registreren
-
-            </h1>
-
-
-            <p class="mb-0">
-
-                Maak een nieuw account aan voor het klantenhulpportaal
-
-            </p>
-
-
-        </div>
-
-
-    </div>
-
-
-
-
-
+    <PageHeader
+        title="Registreren"
+        subtitle="Maak een nieuw account aan voor het klantenhulpportaal."
+    />
 
     <div class="row justify-content-center">
 
-
         <div class="col-lg-6">
 
+            <div class="card shadow-sm border-0">
 
+                <div class="card-body p-4">
 
-            <div class="register-card">
+                    <div
+                        v-if="message"
+                        class="alert alert-success"
+                    >
+                        {{ message }}
+                    </div>
 
+                    <div
+                        v-if="error"
+                        class="alert alert-danger"
+                    >
+                        {{ error }}
+                    </div>
 
+                    <div class="mb-4">
 
-                <div
-                    v-if="message"
-                    class="alert alert-success"
-                >
+                        <label class="form-label fw-semibold">
+                            Naam
+                        </label>
 
-                    {{ message }}
+                        <input
+                            v-model="form.name"
+                            class="form-control"
+                            placeholder="Naam"
+                        >
+
+                    </div>
+
+                    <div class="mb-4">
+
+                        <label class="form-label fw-semibold">
+                            E-mailadres
+                        </label>
+
+                        <input
+                            v-model="form.email"
+                            class="form-control"
+                            type="email"
+                            placeholder="naam@voorbeeld.nl"
+                        >
+
+                    </div>
+
+                    <div class="mb-4">
+
+                        <label class="form-label fw-semibold">
+                            Wachtwoord
+                        </label>
+
+                        <input
+                            v-model="form.password"
+                            class="form-control"
+                            type="password"
+                            placeholder="Wachtwoord"
+                        >
+
+                    </div>
+
+                    <div class="d-flex justify-content-end mt-4">
+
+                        <RouterLink
+                            to="/login"
+                            class="btn btn-outline-secondary me-2"
+                        >
+                            Terug naar login
+                        </RouterLink>
+
+                        <button
+                            class="btn btn-primary"
+                            @click="register"
+                            :disabled="loading"
+                        >
+
+                            <i class="bi bi-person-plus me-2"></i>
+
+                            {{ loading ? 'Registreren...' : 'Registreren' }}
+
+                        </button>
+
+                    </div>
 
                 </div>
-
-
-
-
-
-                <div
-                    v-if="error"
-                    class="alert alert-danger"
-                >
-
-                    {{ error }}
-
-                </div>
-
-
-
-
-
-
-
-               <div class="form-group mb-4">
-
-
-    <label class="form-label">
-        Naam
-    </label>
-
-
-    <input
-        v-model="form.name"
-        class="form-control"
-        placeholder="Naam"
-    >
-
-
-</div>
-
-
-
-
-
-<div class="form-group mb-4">
-
-
-    <label class="form-label">
-        Email
-    </label>
-
-
-    <input
-        v-model="form.email"
-        class="form-control"
-        placeholder="Email"
-        type="email"
-    >
-
-
-</div>
-
-
-
-
-
-
-<div class="form-group mb-5">
-
-
-    <label class="form-label">
-        Wachtwoord
-    </label>
-
-
-    <input
-        v-model="form.password"
-        class="form-control"
-        placeholder="Wachtwoord"
-        type="password"
-    >
-
-
-</div>
-
-
-
-
-
-
-
-                <button
-                    class="btn btn-primary w-100"
-                    @click="register"
-                    :disabled="loading"
-                >
-
-
-                    <i class="bi bi-person-plus me-2"></i>
-
-
-                    {{ loading ? 'Registreren...' : 'Registreren' }}
-
-
-                </button>
-
-
-
-
 
             </div>
 
-
-
         </div>
 
-
     </div>
-
-
 
 </div>
 
@@ -187,6 +118,8 @@
 import { ref } from 'vue'
 
 import api from '../api/axios'
+
+import PageHeader from '../components/PageHeader.vue'
 
 
 

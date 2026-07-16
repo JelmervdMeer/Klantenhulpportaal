@@ -1,227 +1,183 @@
 <template>
 
-    <div class="layout">
+<div class="layout min-vh-100 bg-light d-flex flex-column">
 
 
-        <!-- Topbar -->
+    <!-- =========================
+         HEADER
+    ========================== -->
 
-        <header class="topbar">
-
-
-            <!-- Logo links -->
-
-            <div class="logo">
-
-    <i class="bi bi-headset"></i>
-
-</div>
+    <header class="topbar">
 
 
+        <!-- Logo -->
+        <div class="header-logo">
 
-            <!-- Titel midden -->
+            <i class="bi bi-buildings-fill"></i>
 
-            <div class="header-title">
+        </div>
 
-                <h4 class="mb-0 fw-bold">
-                    Klantenhulpportaal
-                </h4>
 
-                <small>
-                    Ticketbeheer & klantenondersteuning
-                </small>
+
+        <!-- Titel -->
+        <div class="header-title">
+
+            <h4 class="mb-0 fw-bold">
+                Klantenhulpportaal
+            </h4>
+
+            <small>
+                Ticketbeheer & klantenondersteuning
+            </small>
+
+        </div>
+
+
+
+
+        <!-- Gebruiker + acties -->
+
+        <div class="header-actions">
+
+
+            <div class="user-card">
+
+
+                <div class="avatar">
+
+                    {{
+                        authStore.user?.name
+                        ?.charAt(0)
+                        .toUpperCase()
+                    }}
+
+                </div>
+
+
+
+                <div>
+
+                    <div class="fw-bold">
+
+                        {{ authStore.user?.name }}
+
+                    </div>
+
+
+                    <small>
+
+                        {{ authStore.user?.role }}
+
+                    </small>
+
+                </div>
+
 
             </div>
 
 
 
 
-            <!-- Acties rechts -->
+            <button
+                class="btn btn-danger logout-btn"
+                @click="logout"
+            >
 
-            <div class="header-actions">
+                <i class="bi bi-box-arrow-right me-2"></i>
 
+                Uitloggen
 
-                <button class="btn btn-light notification-btn">
+            </button>
 
-                    <i class="bi bi-bell"></i>
-
-                </button>
-
-
-
-                <div class="user-card">
-
-
-                    <div class="avatar">
-
-                        {{ authStore.user?.name?.charAt(0).toUpperCase() }}
-
-                    </div>
-
-
-
-                    <div>
-
-                        <div class="fw-bold">
-
-                            {{ authStore.user?.name }}
-
-                        </div>
-
-
-                        <small>
-
-                            {{ authStore.user?.role }}
-
-                        </small>
-
-
-                    </div>
-
-
-                </div>
-
-
-
-                <button
-                    class="btn btn-danger logout-btn"
-                    @click="logout"
-                >
-
-                    <i class="bi bi-box-arrow-right me-2"></i>
-
-                    Uitloggen
-
-                </button>
-
-
-            </div>
-
-
-        </header>
-
-
-
-
-
-
-        <div class="body-layout">
-
-
-
-            <!-- Sidebar -->
-
-            <aside class="sidebar">
-
-
-                <div class="logo">
-
-
-                    <i class="bi bi-headset"></i>
-
-
-                    <span>
-                        Helpdesk
-                    </span>
-
-
-                </div>
-
-
-
-
-                <nav>
-
-
-                    <RouterLink
-                        class="menu-item"
-                        to="/dashboard"
-                    >
-
-                        <i class="bi bi-speedometer2"></i>
-
-                        Dashboard
-
-                    </RouterLink>
-
-
-
-
-
-                    <RouterLink
-                        class="menu-item"
-                        to="/tickets"
-                    >
-
-                        <i class="bi bi-ticket-perforated"></i>
-
-                        Tickets
-
-                    </RouterLink>
-
-
-
-
-
-                    <RouterLink
-                        v-if="authStore.user?.role === 'admin'"
-                        class="menu-item"
-                        to="/admin/categories"
-                    >
-
-                        <i class="bi bi-tags"></i>
-
-                        Categorieën
-
-                    </RouterLink>
-
-
-
-
-
-                    <RouterLink
-                        v-if="authStore.user?.role === 'admin'"
-                        class="menu-item"
-                        to="/admin/users"
-                    >
-
-                        <i class="bi bi-people"></i>
-
-                        Gebruikers
-
-                    </RouterLink>
-
-
-
-                </nav>
-
-
-            </aside>
-
-
-
-
-
-
-
-            <!-- Pagina inhoud -->
-
-
-            <main class="content">
-
-
-                <RouterView />
-
-
-            </main>
 
 
         </div>
 
 
+    </header>
+
+
+
+
+
+    <!-- =========================
+         NAVIGATIE
+    ========================== -->
+
+
+<nav class="navigation-bar shadow">
+
+    <div class="container-fluid">
+
+        <div class="d-flex flex-row w-100">
+
+            <RouterLink
+                class="nav-link"
+                to="/dashboard"
+            >
+                <i class="bi bi-speedometer2 me-2"></i>
+                Dashboard
+            </RouterLink>
+
+
+            <RouterLink
+                class="nav-link"
+                to="/tickets"
+            >
+                <i class="bi bi-ticket-perforated me-2"></i>
+                Tickets
+            </RouterLink>
+
+
+            <RouterLink
+                v-if="authStore.user?.role === 'admin'"
+                class="nav-link"
+                to="/admin/categories"
+            >
+                <i class="bi bi-tags me-2"></i>
+                Categorieën
+            </RouterLink>
+
+
+            <RouterLink
+                v-if="authStore.user?.role === 'admin'"
+                class="nav-link"
+                to="/admin/users"
+            >
+                <i class="bi bi-people me-2"></i>
+                Gebruikers
+            </RouterLink>
+
+        </div>
+
     </div>
+
+</nav>
+
+
+
+
+
+    <!-- =========================
+         PAGINA INHOUD
+    ========================== -->
+
+
+    <main class="content flex-grow-1 p-4">
+
+
+        <RouterView />
+
+
+    </main>
+
+
+
+</div>
 
 
 </template>
+
 
 
 
@@ -252,32 +208,14 @@ async function logout(){
 
 
 </script>
-
-
-
-
 <style scoped>
 
 
-.layout{
+/* =========================
+   HEADER
+========================= */
 
-    min-height:100vh;
-
-    display:flex;
-
-    flex-direction:column;
-
-    background:#eef2f7;
-
-}
-
-
-
-
-/* HEADER */
-
-
-.topbar{
+.topbar {
 
     display:grid;
 
@@ -302,25 +240,81 @@ async function logout(){
 
 
 
-.header-logo{
+/* Logo */
+
+.header-logo {
 
     display:flex;
 
-    align-items:center;
+    justify-content:center;
 
 }
 
 
 
-.header-logo i{
+.header-logo i {
 
-    font-size:45px;
+    font-size:48px;
+
+    animation:
+        logoColor 10s ease-in-out infinite;
 
 }
 
 
 
-.header-title{
+
+@keyframes logoColor {
+
+
+    0% {
+
+        color:#ffffff;
+
+    }
+
+
+    20% {
+
+        color:#dbeafe;
+
+    }
+
+
+    40% {
+
+        color:#93c5fd;
+
+    }
+
+
+    60% {
+
+        color:#bfdbfe;
+
+    }
+
+
+    80% {
+
+        color:#ffffff;
+
+    }
+
+
+    100% {
+
+        color:#dbeafe;
+
+    }
+
+}
+
+
+
+/* Titel */
+
+.header-title {
 
     text-align:center;
 
@@ -328,7 +322,7 @@ async function logout(){
 
 
 
-.header-title small{
+.header-title small {
 
     color:rgba(255,255,255,.75);
 
@@ -337,7 +331,9 @@ async function logout(){
 
 
 
-.header-actions{
+/* Gebruiker rechts */
+
+.header-actions {
 
     justify-self:end;
 
@@ -351,29 +347,7 @@ async function logout(){
 
 
 
-
-
-.notification-btn{
-
-    width:45px;
-
-    height:45px;
-
-    border-radius:50%;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-}
-
-
-
-
-
-.user-card{
+.user-card {
 
     display:flex;
 
@@ -385,7 +359,7 @@ async function logout(){
 
 
 
-.user-card small{
+.user-card small {
 
     color:rgba(255,255,255,.75);
 
@@ -394,7 +368,9 @@ async function logout(){
 
 
 
-.avatar{
+/* Avatar */
+
+.avatar {
 
     width:46px;
 
@@ -421,205 +397,65 @@ async function logout(){
 
 
 
-.logout-btn{
+/* =========================
+   NAVIGATIE
+========================= */
 
-    border-radius:12px;
 
-    padding:10px 18px;
+.navigation-bar {
+
+    background:#1e3a8a;
+
+    padding:8px 0;
+
+}
+
+
+.navigation-bar > .container-fluid > div {
+
+    display:flex;
+
+    flex-direction:row;
+
+    width:100%;
 
 }
 
 
 
-
-
-/* LAYOUT */
-
-
-.body-layout{
-
-    display:flex;
+.navigation-bar .nav-link {
 
     flex:1;
 
-}
-
-
-
-
-.sidebar{
-
-    width:260px;
-
-    background:#1e293b;
-
-    color:white;
-
-    padding:25px;
-
-}
-
-
-.logo {
-
-    width:80px;
-
-    height:80px;
-
-    margin:0 auto 20px;
-
-
-    background:linear-gradient(
-        135deg,
-        #ffffff,
-        #dbeafe
-    );
-
-
-    color:#2563eb;
-
-
-    border-radius:50%;
-
-
     display:flex;
-
-    align-items:center;
 
     justify-content:center;
 
-
-    box-shadow:
-        0 0 0 0 rgba(255,255,255,.6);
-
-
-    animation:
-        logoPulse 3s infinite;
-
-
-}
-
-
-
-.logo i {
-
-    font-size:42px;
-
-    color:#2563eb;
-
-    animation:
-        logoColor 4s infinite alternate;
-
-}
-
-
-
-
-
-
-@keyframes logoPulse {
-
-
-    0% {
-
-        box-shadow:
-            0 0 0 0 rgba(255,255,255,.6);
-
-    }
-
-
-    50% {
-
-        box-shadow:
-            0 0 0 15px rgba(255,255,255,0);
-
-    }
-
-
-    100% {
-
-        box-shadow:
-            0 0 0 0 rgba(255,255,255,0);
-
-    }
-
-}
-
-
-
-
-
-
-@keyframes logoColor {
-
-
-    0% {
-
-        color:#2563eb;
-
-        transform:scale(1);
-
-    }
-
-
-    50% {
-
-        color:#0d6efd;
-
-        transform:scale(1.08);
-
-    }
-
-
-    100% {
-
-        color:#38bdf8;
-
-        transform:scale(1);
-
-    }
-
-}
-
-
-
-
-.menu-item{
-
-    display:flex;
-
     align-items:center;
 
-    gap:12px;
-
-    color:#cbd5e1;
+    color:white;
 
     text-decoration:none;
 
-    padding:12px 16px;
+    padding:12px 20px;
 
-    border-radius:12px;
+    font-weight:600;
 
-    margin-bottom:8px;
+    border-radius:8px;
 
     transition:.25s;
 
 }
 
 
+.navigation-bar .nav-link:hover {
 
-.menu-item:hover{
-
-    background:#334155;
-
-    color:white;
+    background:rgba(255,255,255,.15);
 
 }
 
 
-
-
-.router-link-active{
+.navigation-bar .router-link-active {
 
     background:#2563eb;
 
@@ -630,111 +466,98 @@ async function logout(){
 
 
 
-
-.menu-item i{
-
-    font-size:20px;
-
-}
+/* =========================
+   CONTENT
+========================= */
 
 
+.content {
 
-
-
-.content{
-
-    flex:1;
-
-    padding:30px;
+    width:100%;
 
 }
 
-/* Algemene knopstijl */
+
+
+
+
+/* =========================
+   BUTTONS
+========================= */
+
 
 .btn {
-    border-radius: 12px;
-    font-weight: 600;
-    padding: 10px 22px;
-    transition: all .25s ease;
-    box-shadow: 0 4px 12px rgba(0,0,0,.08);
+
+    font-weight:600;
+
+    border-radius:12px;
+
+    padding:10px 22px;
+
+    transition:.25s;
+
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+
 }
 
-/* Hover */
+
 
 .btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 18px rgba(0,0,0,.15);
+
+    transform:translateY(-2px);
+
 }
 
-/* Primary */
 
-.btn-primary {
-    background: linear-gradient(135deg,#0d6efd,#2563eb);
-    border: none;
-}
 
-.btn-primary:hover {
-    background: linear-gradient(135deg,#2563eb,#1d4ed8);
-}
 
-/* Success */
-
-.btn-success {
-    background: linear-gradient(135deg,#22c55e,#16a34a);
-    border: none;
-}
-
-.btn-success:hover {
-    background: linear-gradient(135deg,#16a34a,#15803d);
-}
-
-/* Danger */
 
 .btn-danger {
-    background: linear-gradient(135deg,#ef4444,#dc2626);
-    border: none;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #ef4444,
+            #dc2626
+        );
+
+    border:none;
+
 }
 
-.btn-danger:hover {
-    background: linear-gradient(135deg,#dc2626,#b91c1c);
+
+
+
+.btn-primary {
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #0d6efd,
+            #2563eb
+        );
+
+    border:none;
+
 }
 
-/* Warning */
 
-.btn-warning {
-    background: linear-gradient(135deg,#f59e0b,#d97706);
-    border: none;
-    color: white;
-}
 
-.btn-warning:hover {
-    background: linear-gradient(135deg,#d97706,#b45309);
-    color: white;
-}
 
-/* Secondary */
+.btn-success {
 
-.btn-secondary {
-    background: #64748b;
-    border: none;
-}
+    background:
 
-.btn-secondary:hover {
-    background: #475569;
-}
+        linear-gradient(
+            135deg,
+            #22c55e,
+            #16a34a
+        );
 
-/* Outline */
+    border:none;
 
-.btn-outline-secondary {
-    border: 2px solid #cbd5e1;
-    color: #475569;
-    background: white;
-}
-
-.btn-outline-secondary:hover {
-    background: #f8fafc;
-    border-color: #94a3b8;
-    color: #1e293b;
 }
 
 

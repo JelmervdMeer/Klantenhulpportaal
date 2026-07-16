@@ -1,193 +1,110 @@
 <template>
 
-    <div class="container-fluid">
+    <!-- Pagina titel -->
+
+    <PageHeader
+        title="Dashboard"
+        subtitle="Overzicht van het klantenhulpportaal"
+    />
 
 
-        <!-- Pagina header -->
 
-        <div class="page-header">
 
-            <div>
+    <!-- Statistieken -->
 
-                <h1 class="fw-bold mb-2">
-                    Dashboard
-                </h1>
+    <div class="row g-4 mb-4">
 
-                <p class="mb-0">
-                    Overzicht van het klantenhulpportaal
-                </p>
 
-            </div>
+        <div class="col-md-4">
+
+            <StatCard
+                title="Totaal tickets"
+                :value="stats.totaal"
+                icon="bi-ticket"
+                color="primary"
+            />
 
         </div>
 
 
 
-        <!-- Statistieken -->
+        <div class="col-md-4">
 
-        <div class="stats-container">
-
-
-            <div class="stat-card">
-
-                <div class="icon bg-primary">
-
-                    <i class="bi bi-ticket"></i>
-
-                </div>
-
-                <div>
-
-                    <small>
-                        Totaal tickets
-                    </small>
-
-                    <h2>
-                        {{ stats.totaal }}
-                    </h2>
-
-                </div>
-
-            </div>
-
-
-
-
-            <div class="stat-card">
-
-                <div class="icon bg-warning">
-
-                    <i class="bi bi-hourglass-split"></i>
-
-                </div>
-
-
-                <div>
-
-                    <small>
-                        In behandeling
-                    </small>
-
-                    <h2>
-                        {{ stats.in_behandeling }}
-                    </h2>
-
-                </div>
-
-            </div>
-
-
-
-
-
-            <div class="stat-card">
-
-                <div class="icon bg-success">
-
-                    <i class="bi bi-check-circle"></i>
-
-                </div>
-
-
-                <div>
-
-                    <small>
-                        Gesloten
-                    </small>
-
-                    <h2>
-                        {{ stats.gesloten }}
-                    </h2>
-
-                </div>
-
-            </div>
-
-
-
-
-
-            <div class="stat-card">
-
-                <div class="icon bg-danger">
-
-                    <i class="bi bi-exclamation-triangle"></i>
-
-                </div>
-
-
-                <div>
-
-                    <small>
-                        Hoge prioriteit
-                    </small>
-
-                    <h2>
-                        {{ stats.hoge_prioriteit }}
-                    </h2>
-
-                </div>
-
-            </div>
-
+            <StatCard
+                title="In behandeling"
+                :value="stats.in_behandeling"
+                icon="bi-hourglass-split"
+                color="warning"
+            />
 
         </div>
 
 
 
+        <div class="col-md-4">
 
+            <StatCard
+                title="Gesloten"
+                :value="stats.gesloten"
+                icon="bi-check-circle"
+                color="success"
+            />
 
-        <!-- Ticket status grafiek -->
+        </div>
 
-        <div
-    v-if="dashboard"
-    class="card mb-4"
->
-
-    <div class="tickets-title">
-
-        <h4 class="mb-0">
-            Ticketstatus overzicht
-        </h4>
 
     </div>
 
-    <div class="card-body">
+
+
+
+
+
+    <!-- Grafiek -->
+
+
+    <ContentCard
+        v-if="dashboard"
+        title="Ticketstatus overzicht"
+        icon="bi-bar-chart"
+        class="mb-4"
+    >
+
 
         <TicketStatusChart
             :data="dashboard.status_overzicht"
         />
 
-    </div>
 
-</div>
-
-
-        <!-- Recente tickets -->
-
-<div class="card">
-
-
-    <div class="tickets-title">
-
-    <h4 class="mb-0">
-        Recente tickets
-    </h4>
-
-</div>
+    </ContentCard>
 
 
 
-    <div class="card-body">
 
 
-        <div class="ticket-grid">
+
+
+
+    <!-- Recente tickets -->
+
+
+    <ContentCard
+        title="Recente tickets"
+        icon="bi-ticket-perforated"
+    >
+
+
+        <div class="row g-4">
 
 
             <div
                 v-for="ticket in tickets"
                 :key="ticket.id"
-                class="ticket-item"
+                class="
+                    col-xl-3
+                    col-lg-4
+                    col-md-6
+                "
             >
 
 
@@ -204,23 +121,20 @@
 
 
         </div>
+    </ContentCard>/>
 
 
-    </div>
-    </div>
-
-
-
-</div>
-
-
-</template>
-
+        </template>
 
 
 
 
 <script setup lang="ts">
+
+import PageHeader from '../components/PageHeader.vue'
+import StatCard from '../components/StatCard.vue'
+import ContentCard from '../components/ContentCard.vue'
+import TicketCard from '../components/TicketCard.vue'
 
 
 import { ref, onMounted } from 'vue'
@@ -231,7 +145,6 @@ import api from '../api/axios'
 
 import TicketStatusChart from '../components/TicketStatusChart.vue'
 
-import TicketCard from '../components/TicketCard.vue'
 
 
 
@@ -434,249 +347,33 @@ onMounted(loadDashboard)
 <style scoped>
 
 
-.page-header {
-
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-
-    background:linear-gradient(
-        135deg,
-        #0d6efd,
-        #3b82f6
-    );
-
-
-    color:white;
-
-
-    padding:30px;
-
-
-    border-radius:16px;
-
-
-    margin-bottom:30px;
-
-
-    box-shadow:
-        0 8px 24px rgba(13,110,253,.25);
-
-
-}
-
-
-
-.page-header p{
-
-
-    color:rgba(255,255,255,.8);
-
-
-}
-
-
-
-
-
-.stats-container {
-
-
-    display:flex;
-
-
-    justify-content:center;
-
-
-    gap:20px;
-
-
-    flex-wrap:wrap;
-
-
-    margin-bottom:30px;
-
-
-}
-
-
-
-
-
-.stat-card {
-
-
-    display:flex;
-
-
-    align-items:center;
-
-
-    gap:16px;
-
-
-    width:250px;
-
-
-    padding:20px;
-
-
-    background:white;
-
-
-    border-radius:16px;
-
-
-    box-shadow:
-        0 8px 24px rgba(0,0,0,.08);
-
-
-}
-
-
-
-
-
-.stat-card h2 {
-
-
-    margin:5px 0 0;
-
-
-    font-weight:700;
-
-
-}
-
-
-
-
 .icon {
-
 
     width:48px;
 
-
     height:48px;
-
-
-    border-radius:12px;
-
 
     display:flex;
 
-
     align-items:center;
-
 
     justify-content:center;
 
+    border-radius:12px;
 
     color:white;
 
-
     font-size:22px;
 
-
 }
-
 
 
 
 .card {
 
-
-    border:none;
-
-
     border-radius:16px;
 
-
-    box-shadow:
-        0 8px 24px rgba(0,0,0,.08);
-
-
 }
-
-
-
-
-.card-header {
-
-
-    background:#2563eb;
-
-
-    color:white;
-
-
-    border-radius:16px 16px 0 0 !important;
-
-
-    padding:18px;
-
-
-}
-
-
-
-
-.ticket-grid {
-
-
-    row-gap:25px;
-
-
-}
-
-.ticket-grid {
-
-    display:grid;
-
-    grid-template-columns: repeat(2, 1fr);
-
-    gap:25px;
-
-}
-
-
-
-.ticket-item {
-
-    width:100%;
-
-}
-
-
-
-/* Tablet */
-
-@media(max-width: 992px){
-
-    .ticket-grid {
-
-        grid-template-columns:1fr;
-
-    }
-
-    
-    .tickets-title {
-
-    padding:20px 24px;
-
-    background:white;
-
-    border-radius:16px 16px 0 0;
-
-    font-weight:700;
-
-}
-}
-
 
 
 

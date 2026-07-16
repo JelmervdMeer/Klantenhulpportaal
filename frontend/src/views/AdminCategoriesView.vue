@@ -2,6 +2,7 @@
 
 import { ref, onMounted } from 'vue'
 import api from '../api/axios'
+import PageHeader from '../components/PageHeader.vue'
 
 
 interface Category {
@@ -190,29 +191,16 @@ onMounted(loadCategories)
 <div class="container-fluid">
 
 
+
     <!-- Pagina header -->
 
-    <div class="page-header mb-4">
-
-
-        <div>
-
-            <h1 class="fw-bold mb-1">
-                Categoriebeheer
-            </h1>
-
-
-            <p class="mb-0">
-                Beheer ticketcategorieën
-            </p>
-
-
-        </div>
-
-
+    <PageHeader
+        title="Categoriebeheer"
+        subtitle="Beheer ticketcategorieën"
+    >
 
         <button
-            class="btn btn-light new-category-btn"
+            class="btn btn-primary"
             @click="openCreate"
         >
 
@@ -222,8 +210,8 @@ onMounted(loadCategories)
 
         </button>
 
+    </PageHeader>
 
-    </div>
 
 
 
@@ -234,7 +222,7 @@ onMounted(loadCategories)
 
     <div
         v-if="loading"
-        class="alert alert-info"
+        class="alert alert-info mt-4"
     >
 
         Categorieën laden...
@@ -245,7 +233,7 @@ onMounted(loadCategories)
 
     <div
         v-if="error"
-        class="alert alert-danger"
+        class="alert alert-danger mt-4"
     >
 
         {{ error }}
@@ -261,46 +249,73 @@ onMounted(loadCategories)
     <!-- Formulier -->
 
 
-    <div
+    <ContentCard
         v-if="showForm"
-        class="card form-card mb-4"
+        class="mt-4"
+        :title="
+            editingId
+            ? 'Categorie aanpassen'
+            : 'Nieuwe categorie'
+        "
+        icon="bi-tag"
     >
 
-        <div class="card-body">
+
+        <div class="row g-3">
 
 
-            <h4 class="fw-bold mb-3">
-
-                {{ editingId 
-                    ? 'Categorie aanpassen' 
-                    : 'Nieuwe categorie' 
-                }}
-
-            </h4>
+            <div class="col-md-6">
 
 
+                <input
 
-            <input
-                v-model="form.name"
-                class="form-control mb-3"
-                placeholder="Naam categorie"
-            >
+                    v-model="form.name"
 
+                    class="form-control"
 
+                    placeholder="Naam categorie"
 
-            <textarea
-                v-model="form.description"
-                class="form-control mb-3"
-                rows="3"
-                placeholder="Omschrijving"
-            ></textarea>
+                >
 
 
+            </div>
+
+
+
+
+            <div class="col-12">
+
+
+                <textarea
+
+                    v-model="form.description"
+
+                    class="form-control"
+
+                    rows="3"
+
+                    placeholder="Omschrijving"
+
+                ></textarea>
+
+
+            </div>
+
+
+        </div>
+
+
+
+
+        <div class="mt-4">
 
 
             <button
+
                 class="btn btn-success me-2"
+
                 @click="saveCategory"
+
             >
 
                 <i class="bi bi-check-circle me-2"></i>
@@ -313,8 +328,11 @@ onMounted(loadCategories)
 
 
             <button
+
                 class="btn btn-secondary"
-                @click="showForm=false"
+
+                @click="showForm = false"
+
             >
 
                 Annuleren
@@ -324,7 +342,35 @@ onMounted(loadCategories)
 
         </div>
 
-    </div>
+
+    </ContentCard>
+
+
+
+
+
+
+
+
+
+    <!-- Geen categorieën -->
+
+
+    <EmptyState
+
+        v-if="!loading && !categories.length"
+
+        class="mt-4"
+
+        icon="bi-tags"
+
+        title="Geen categorieën gevonden"
+
+        text="Er zijn nog geen ticketcategorieën aangemaakt."
+
+    />
+
+
 
 
 
@@ -335,70 +381,111 @@ onMounted(loadCategories)
     <!-- Categorie kaarten -->
 
 
-    <div class="row category-grid">
+    <ContentCard
+
+        v-if="categories.length"
+
+        class="mt-4"
+
+        title="Categorieën"
+
+        icon="bi-tags"
+
+    >
 
 
-        <div
-            v-for="category in categories"
-            :key="category.id"
-            class="col-xl-4 col-lg-6 category-column"
-        >
+        <div class="row g-4">
 
 
-            <div class="category-card">
+            <div
 
+                v-for="category in categories"
 
-                <div class="category-icon">
+                :key="category.id"
 
-                    <i class="bi bi-tag"></i>
+                class="col-xl-4 col-lg-6"
 
-                </div>
-
-
-
-                <h4 class="fw-bold">
-
-                    {{ category.name }}
-
-                </h4>
-
-
-
-                <p class="text-muted">
-
-                    {{ category.description }}
-
-                </p>
+            >
 
 
 
-                <div class="category-actions">
+                <div class="card shadow-sm border-0 h-100">
 
 
-                    <button
-                        class="btn btn-warning btn-sm"
-                        @click="editCategory(category)"
-                    >
+                    <div class="card-body">
 
-                        <i class="bi bi-pencil"></i>
 
-                        Bewerken
 
-                    </button>
+                        <div class="category-icon mb-3">
+
+
+                            <i class="bi bi-tag-fill"></i>
+
+
+                        </div>
 
 
 
 
-                    <button
-                        class="btn btn-danger btn-sm"
-                        @click="deleteCategory(category.id)"
-                    >
+                        <h4 class="fw-bold">
 
-                        <i class="bi bi-trash"></i>
+                            {{ category.name }}
 
-                        Verwijderen
+                        </h4>
 
-                    </button>
+
+
+
+                        <p class="text-muted">
+
+                            {{ category.description }}
+
+                        </p>
+
+
+
+
+                        <div class="d-flex gap-2 mt-4">
+
+
+                            <button
+
+                                class="btn btn-primary flex-fill"
+
+                                @click="editCategory(category)"
+
+                            >
+
+                                <i class="bi bi-pencil me-2"></i>
+
+                                Bewerken
+
+                            </button>
+
+
+
+
+                            <button
+
+                                class="btn btn-danger flex-fill"
+
+                                @click="deleteCategory(category.id)"
+
+                            >
+
+                                <i class="bi bi-trash me-2"></i>
+
+                                Verwijderen
+
+                            </button>
+
+
+
+                        </div>
+
+
+
+                    </div>
 
 
                 </div>
@@ -408,159 +495,35 @@ onMounted(loadCategories)
             </div>
 
 
-
         </div>
 
 
-    </div>
+    </ContentCard>
+
+
 
 
 
 </div>
 
+
 </template>
 <style scoped>
 
-
-.page-header {
-
-    background:linear-gradient(
-        135deg,
-        #0d6efd,
-        #2563eb
-    );
-
-    color:white;
-
-    padding:30px;
-
-    border-radius:18px;
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    box-shadow:
-        0 8px 24px rgba(0,0,0,.15);
-
-}
-
-
-
-.page-header p {
-
-    color:rgba(255,255,255,.8);
-
-}
-
-
-
-.new-category-btn {
-
-    padding:12px 22px;
-
-    border-radius:12px;
-
-    font-weight:600;
-
-}
-
-
-
-
 .card {
 
-    border:none;
-
-    border-radius:18px;
-
-    box-shadow:
-        0 8px 24px rgba(0,0,0,.08);
+    border-radius:16px;
 
 }
-
-
-
-.form-card {
-
-    background:white;
-
-}
-
-
-
-
-
-.category-grid {
-
-    margin-top:10px;
-
-}
-
-
-
-.category-column {
-
-    padding:12px;
-
-}
-
-
-
-
-
-.category-card {
-
-
-    background:white;
-
-    border-radius:18px;
-
-    padding:25px;
-
-    height:100%;
-
-    box-shadow:
-        0 8px 24px rgba(0,0,0,.08);
-
-
-    transition:.25s;
-
-}
-
-
-
-.category-card:hover {
-
-
-    transform:translateY(-5px);
-
-
-    box-shadow:
-        0 14px 30px rgba(0,0,0,.15);
-
-
-}
-
-
-
 
 
 .category-icon {
 
+    width:60px;
 
-    width:50px;
+    height:60px;
 
-    height:50px;
-
-    border-radius:14px;
-
-    background:#dbeafe;
-
-    color:#2563eb;
-
+    border-radius:12px;
 
     display:flex;
 
@@ -568,40 +531,12 @@ onMounted(loadCategories)
 
     justify-content:center;
 
+    background:#e7f1ff;
 
-    font-size:24px;
+    color:#0d6efd;
 
-
-    margin-bottom:18px;
-
-
-}
-
-
-
-
-
-.category-card p {
-
-    min-height:50px;
+    font-size:28px;
 
 }
-
-
-
-
-.category-actions {
-
-
-    display:flex;
-
-    gap:10px;
-
-    margin-top:20px;
-
-
-}
-
-
 
 </style>
