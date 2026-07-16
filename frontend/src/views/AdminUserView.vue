@@ -300,7 +300,7 @@ onMounted(loadUsers)
         >
 
 
-            <div class="card shadow-sm border-0 h-100">
+            <div class="user-card card shadow-sm border-0 h-100">>
 
 
                 <div class="card-body d-flex flex-column">
@@ -477,5 +477,56 @@ onMounted(loadUsers)
 
 }
 
+.user-card {
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    transition:.25s ease;
+
+}
+
+
+
+.user-card:hover {
+
+    transform:translateY(-6px);
+
+    box-shadow:
+        0 14px 30px rgba(0,0,0,.15) !important;
+
+}
+
+.user-card:hover .user-avatar {
+
+    transform:scale(1.08);
+
+}
+
+
+.user-avatar {
+
+    width:60px;
+
+    height:60px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:#e7f1ff;
+
+    color:#0d6efd;
+
+    font-size:28px;
+
+    transition:.25s ease;
+
+}
 
 </style>

@@ -10,6 +10,7 @@
 
 
 
+
     <!-- Statistieken -->
 
     <div class="row g-4 mb-4">
@@ -28,6 +29,7 @@
 
 
 
+
         <div class="col-md-4">
 
             <StatCard
@@ -38,6 +40,7 @@
             />
 
         </div>
+
 
 
 
@@ -54,6 +57,8 @@
 
 
     </div>
+
+
 
 
 
@@ -85,6 +90,7 @@
 
 
 
+
     <!-- Recente tickets -->
 
 
@@ -101,9 +107,9 @@
                 v-for="ticket in tickets"
                 :key="ticket.id"
                 class="
-                    col-xl-3
-                    col-lg-4
-                    col-md-6
+                    col-xl-4
+                    col-lg-6
+                    col-md-12
                 "
             >
 
@@ -121,10 +127,13 @@
 
 
         </div>
-    </ContentCard>/>
 
 
-        </template>
+    </ContentCard>
+
+
+
+</template>
 
 
 

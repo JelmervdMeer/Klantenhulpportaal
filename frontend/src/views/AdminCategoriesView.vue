@@ -4,6 +4,7 @@ import { ref, onMounted } from 'vue'
 import api from '../api/axios'
 import PageHeader from '../components/PageHeader.vue'
 import CategoryCard from '../components/CategoryCard.vue'
+import BaseCard from '../components/BaseCard.vue'
 
 
 interface Category {
@@ -247,6 +248,8 @@ onMounted(loadCategories)
 
 
 
+
+
     <!-- Formulier -->
 
 
@@ -418,116 +421,111 @@ onMounted(loadCategories)
 
 
 
-                <div class="card shadow-sm border-0 h-100">
+                <BaseCard>
 
 
 
-                    <div class="card-body d-flex flex-column">
+                    <!-- Icon -->
 
 
+                    <div class="category-icon mb-3">
 
 
-
-                        <!-- Icon -->
-
-                        <div class="category-icon mb-3">
-
-
-                            <i class="bi bi-tag-fill"></i>
-
-
-                        </div>
-
-
-
-
-
-
-                        <!-- Titel -->
-
-
-                        <h4 class="fw-bold mb-2">
-
-                            {{ category.name }}
-
-                        </h4>
-
-
-
-
-
-
-
-                        <!-- Beschrijving -->
-
-
-                        <p class="text-muted">
-
-                            {{ category.description }}
-
-                        </p>
-
-
-
-
-
-
-
-                        <!-- Knoppen altijd onderaan -->
-
-
-                        <div class="mt-auto pt-4">
-
-
-                            <div class="d-flex gap-2">
-
-
-                                <button
-
-                                    class="btn btn-primary flex-fill"
-
-                                    @click="editCategory(category)"
-
-                                >
-
-                                    <i class="bi bi-pencil me-2"></i>
-
-                                    Bewerken
-
-                                </button>
-
-
-
-
-
-
-
-                                <button
-
-                                    class="btn btn-danger flex-fill"
-
-                                    @click="deleteCategory(category.id)"
-
-                                >
-
-                                    <i class="bi bi-trash me-2"></i>
-
-                                    Verwijderen
-
-                                </button>
-
-
-                            </div>
-
-
-                        </div>
-
+                        <i class="bi bi-tag-fill"></i>
 
 
                     </div>
 
 
-                </div>
+
+
+
+
+
+                    <!-- Titel -->
+
+
+                    <h4 class="fw-bold mb-2">
+
+                        {{ category.name }}
+
+                    </h4>
+
+
+
+
+
+
+
+                    <!-- Beschrijving -->
+
+
+                    <p class="text-muted">
+
+                        {{ category.description }}
+
+                    </p>
+
+
+
+
+
+
+
+
+                    <!-- Knoppen -->
+
+
+                    <template #actions>
+
+
+                        <div class="d-flex gap-2">
+
+
+                            <button
+
+                                class="btn btn-primary flex-fill"
+
+                                @click="editCategory(category)"
+
+                            >
+
+                                <i class="bi bi-pencil me-2"></i>
+
+                                Bewerken
+
+                            </button>
+
+
+
+
+
+
+
+                            <button
+
+                                class="btn btn-danger flex-fill"
+
+                                @click="deleteCategory(category.id)"
+
+                            >
+
+                                <i class="bi bi-trash me-2"></i>
+
+                                Verwijderen
+
+                            </button>
+
+
+                        </div>
+
+
+                    </template>
+
+
+
+
+                </BaseCard>
 
 
 
@@ -547,9 +545,9 @@ onMounted(loadCategories)
 
 
 </div>
-
-
 </template>
+
+
 <style scoped>
 
 .card {
