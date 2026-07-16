@@ -133,7 +133,14 @@ defineProps({
 
     transition:.25s;
 
+    box-shadow: .25s ease;
 
+
+}
+
+.base-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 30px rgba(0,0,0,.15);
 }
 
 

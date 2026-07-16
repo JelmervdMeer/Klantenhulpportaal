@@ -4,7 +4,7 @@ import { ref, onMounted } from 'vue'
 import api from '../api/axios'
 import PageHeader from '../components/PageHeader.vue'
 import CategoryCard from '../components/CategoryCard.vue'
-import BaseCard from '../components/BaseCard.vue'
+
 
 
 interface Category {
@@ -190,361 +190,171 @@ onMounted(loadCategories)
 </script>
 <template>
 
-<div class="container-fluid">
+    <div class="container-fluid">
 
+        <!-- Pagina header -->
 
-    <!-- Pagina header -->
-
-    <PageHeader
-        title="Categoriebeheer"
-        subtitle="Beheer ticketcategorieën"
-    >
-
-        <button
-            class="btn btn-primary"
-            @click="openCreate"
+        <PageHeader
+            title="Categoriebeheer"
+            subtitle="Beheer ticketcategorieën"
         >
 
-            <i class="bi bi-plus-circle me-2"></i>
+            <button
+                class="btn btn-primary"
+                @click="openCreate"
+            >
 
-            Nieuwe categorie
+                <i class="bi bi-plus-circle me-2"></i>
 
-        </button>
+                Nieuwe categorie
 
-    </PageHeader>
+            </button>
 
-
-
-
-
-
-    <!-- Meldingen -->
-
-
-    <div
-        v-if="loading"
-        class="alert alert-info mt-4"
-    >
-
-        Categorieën laden...
-
-    </div>
-
-
-
-
-    <div
-        v-if="error"
-        class="alert alert-danger mt-4"
-    >
-
-        {{ error }}
-
-    </div>
+        </PageHeader>
 
 
 
 
 
+        <!-- Meldingen -->
+
+        <div
+            v-if="loading"
+            class="alert alert-info mt-4"
+        >
+
+            Categorieën laden...
+
+        </div>
+
+
+
+        <div
+            v-if="error"
+            class="alert alert-danger mt-4"
+        >
+
+            {{ error }}
+
+        </div>
 
 
 
 
-    <!-- Formulier -->
 
+        <!-- Formulier -->
 
-    <ContentCard
+        <ContentCard
+            v-if="showForm"
+            class="mt-4"
+            :title="
+                editingId
+                    ? 'Categorie aanpassen'
+                    : 'Nieuwe categorie'
+            "
+            icon="bi-tag"
+        >
 
-        v-if="showForm"
+            <div class="row g-3">
 
-        class="mt-4"
+                <div class="col-md-6">
 
-        :title="
-            editingId
-            ? 'Categorie aanpassen'
-            : 'Nieuwe categorie'
-        "
+                    <input
+                        v-model="form.name"
+                        class="form-control"
+                        placeholder="Naam categorie"
+                    >
 
-        icon="bi-tag"
+                </div>
 
-    >
+                <div class="col-12">
 
+                    <textarea
+                        v-model="form.description"
+                        class="form-control"
+                        rows="3"
+                        placeholder="Omschrijving"
+                    ></textarea>
 
-        <div class="row g-3">
+                </div>
 
+            </div>
 
-            <div class="col-md-6">
+            <div class="mt-4">
 
-
-                <input
-
-                    v-model="form.name"
-
-                    class="form-control"
-
-                    placeholder="Naam categorie"
-
+                <button
+                    class="btn btn-success me-2"
+                    @click="saveCategory"
                 >
 
+                    <i class="bi bi-check-circle me-2"></i>
+
+                    Opslaan
+
+                </button>
+
+                <button
+                    class="btn btn-secondary"
+                    @click="showForm = false"
+                >
+
+                    Annuleren
+
+                </button>
 
             </div>
 
+        </ContentCard>
 
 
 
-            <div class="col-12">
 
 
-                <textarea
+        <!-- Geen categorieën -->
 
-                    v-model="form.description"
+        <EmptyState
+            v-if="!loading && !categories.length"
+            class="mt-4"
+            icon="bi-tags"
+            title="Geen categorieën gevonden"
+            text="Er zijn nog geen ticketcategorieën aangemaakt."
+        />
 
-                    class="form-control"
 
-                    rows="3"
 
-                    placeholder="Omschrijving"
 
-                ></textarea>
 
+        <!-- Categorie kaarten -->
+
+        <ContentCard
+            v-if="categories.length"
+            class="mt-4"
+            title="Categorieën"
+            icon="bi-tags"
+        >
+
+            <div class="row g-4">
+
+                <div
+                    v-for="category in categories"
+                    :key="category.id"
+                    class="col-xl-4 col-lg-6"
+                >
+
+                    <CategoryCard
+                        :category="category"
+                        @edit="editCategory"
+                        @delete="deleteCategory"
+                    />
+
+                </div>
 
             </div>
 
+        </ContentCard>
 
-        </div>
+    </div>
 
-
-
-
-
-        <div class="mt-4">
-
-
-            <button
-
-                class="btn btn-success me-2"
-
-                @click="saveCategory"
-
-            >
-
-                <i class="bi bi-check-circle me-2"></i>
-
-                Opslaan
-
-            </button>
-
-
-
-
-            <button
-
-                class="btn btn-secondary"
-
-                @click="showForm = false"
-
-            >
-
-                Annuleren
-
-            </button>
-
-
-        </div>
-
-
-    </ContentCard>
-
-
-
-
-
-
-
-
-
-    <!-- Geen categorieën -->
-
-
-    <EmptyState
-
-        v-if="!loading && !categories.length"
-
-        class="mt-4"
-
-        icon="bi-tags"
-
-        title="Geen categorieën gevonden"
-
-        text="Er zijn nog geen ticketcategorieën aangemaakt."
-
-    />
-
-
-
-
-
-
-
-
-
-    <!-- Categorie kaarten -->
-
-
-    <ContentCard
-
-        v-if="categories.length"
-
-        class="mt-4"
-
-        title="Categorieën"
-
-        icon="bi-tags"
-
-    >
-
-
-
-        <div class="row g-4">
-
-
-            <div
-
-                v-for="category in categories"
-
-                :key="category.id"
-
-                class="col-xl-4 col-lg-6"
-
-            >
-
-
-
-
-                <BaseCard>
-
-
-
-                    <!-- Icon -->
-
-
-                    <div class="category-icon mb-3">
-
-
-                        <i class="bi bi-tag-fill"></i>
-
-
-                    </div>
-
-
-
-
-
-
-
-                    <!-- Titel -->
-
-
-                    <h4 class="fw-bold mb-2">
-
-                        {{ category.name }}
-
-                    </h4>
-
-
-
-
-
-
-
-                    <!-- Beschrijving -->
-
-
-                    <p class="text-muted">
-
-                        {{ category.description }}
-
-                    </p>
-
-
-
-
-
-
-
-
-                    <!-- Knoppen -->
-
-
-                    <template #actions>
-
-
-                        <div class="d-flex gap-2">
-
-
-                            <button
-
-                                class="btn btn-primary flex-fill"
-
-                                @click="editCategory(category)"
-
-                            >
-
-                                <i class="bi bi-pencil me-2"></i>
-
-                                Bewerken
-
-                            </button>
-
-
-
-
-
-
-
-                            <button
-
-                                class="btn btn-danger flex-fill"
-
-                                @click="deleteCategory(category.id)"
-
-                            >
-
-                                <i class="bi bi-trash me-2"></i>
-
-                                Verwijderen
-
-                            </button>
-
-
-                        </div>
-
-
-                    </template>
-
-
-
-
-                </BaseCard>
-
-
-
-
-
-            </div>
-
-
-        </div>
-
-
-
-    </ContentCard>
-
-
-
-
-
-</div>
 </template>
 
 

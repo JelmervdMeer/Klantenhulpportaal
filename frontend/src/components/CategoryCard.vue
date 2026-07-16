@@ -1,10 +1,6 @@
 <template>
 
-<div class="card shadow-sm border-0 h-100">
-
-
-    <div class="card-body d-flex flex-column">
-
+    <BaseCard>
 
         <div class="category-icon mb-3">
 
@@ -12,131 +8,104 @@
 
         </div>
 
-
-
-        <h4 class="fw-bold">
+        <h4 class="fw-bold mb-2">
 
             {{ category.name }}
 
         </h4>
 
-
-
-        <p class="text-muted">
+        <p class="text-muted mb-0">
 
             {{ category.description }}
 
         </p>
 
+        <template #actions>
 
+            <div class="d-flex gap-2">
 
+                <button
+                    class="btn btn-primary flex-fill"
+                    @click="emit('edit', category)"
+                >
 
-        <div class="d-flex gap-2 mt-auto pt-4">
+                    <i class="bi bi-pencil me-2"></i>
 
+                    Bewerken
 
-            <button
-                class="btn btn-primary flex-fill"
-                @click="$emit('edit', category)"
-            >
+                </button>
 
-                <i class="bi bi-pencil me-2"></i>
+                <button
+                    class="btn btn-danger flex-fill"
+                    @click="emit('delete', category.id)"
+                >
 
-                Bewerken
+                    <i class="bi bi-trash me-2"></i>
 
-            </button>
+                    Verwijderen
 
+                </button>
 
+            </div>
 
+        </template>
 
-            <button
-                class="btn btn-danger flex-fill"
-                @click="$emit('delete', category.id)"
-            >
-
-                <i class="bi bi-trash me-2"></i>
-
-                Verwijderen
-
-            </button>
-
-
-        </div>
-
-
-    </div>
-
-
-</div>
-
+    </BaseCard>
 
 </template>
 
-
-
-
-
 <script setup lang="ts">
 
+import BaseCard from './BaseCard.vue'
 
 interface Category {
 
-    id:number
+    id: number
 
-    name:string
+    name: string
 
-    description:string
+    description: string
 
 }
-
 
 defineProps<{
 
-    category:Category
+    category: Category
 
 }>()
 
+const emit = defineEmits<{
 
+    (e: 'edit', category: Category): void
 
-defineEmits<{
-
-    edit:[category:Category]
-
-    delete:[id:number]
+    (e: 'delete', id: number): void
 
 }>()
-
-
 
 </script>
 
-
-
-
-
 <style scoped>
-
 
 .category-icon {
 
-    width:60px;
+    width: 60px;
 
-    height:60px;
+    height: 60px;
 
-    border-radius:12px;
+    border-radius: 12px;
 
-    display:flex;
+    display: flex;
 
-    align-items:center;
+    align-items: center;
 
-    justify-content:center;
+    justify-content: center;
 
-    background:#e7f1ff;
+    background: #e7f1ff;
 
-    color:#0d6efd;
+    color: #0d6efd;
 
-    font-size:28px;
+    font-size: 28px;
 
 }
-
 
 </style>
