@@ -245,6 +245,8 @@ import PageHeader from '../components/PageHeader.vue'
 
 import EmptyState from '../components/EmptyState.vue'
 
+import BadgeStatus from '../components/BadgeStatus.vue'
+
 
 
 

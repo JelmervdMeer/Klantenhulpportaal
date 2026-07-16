@@ -1,7 +1,8 @@
+
+
 <template>
 
 <div class="container-fluid">
-
 
     <!-- Laden -->
 
@@ -9,22 +10,16 @@
         v-if="loading"
         class="alert alert-info"
     >
-
         Ticket laden...
-
     </div>
-
 
 
     <div
         v-if="error"
         class="alert alert-danger"
     >
-
         {{ error }}
-
     </div>
-
 
 
 
@@ -33,61 +28,23 @@
 
         <!-- Pagina header -->
 
+        <PageHeader
+            :title="ticket.title"
+            :subtitle="`Ticket #${ticket.id}`"
+        >
 
-        <div class="page-header mb-4">
-
-
-            <div>
-
-
-                <button
-                    class="btn btn-light back-btn mb-3"
-                    @click="$router.back()"
-                >
-
-                    <i class="bi bi-arrow-left me-2"></i>
-
-                    Terug
-
-                </button>
-
-
-
-
-                <h1 class="fw-bold mb-1">
-
-                    {{ ticket.title }}
-
-                </h1>
-
-
-
-                <p class="mb-0">
-
-                    Ticket #{{ ticket.id }}
-
-                </p>
-
-
-            </div>
-
-
-
-
-
-            <span
-                class="badge status-large"
-                :class="statusClass(ticket.status)"
+            <button
+                class="btn btn-light"
+                @click="$router.back()"
             >
 
-                {{ ticket.status }}
+                <i class="bi bi-arrow-left me-2"></i>
 
-            </span>
+                Terug
 
+            </button>
 
-        </div>
-
-
+        </PageHeader>
 
 
 
@@ -103,33 +60,29 @@
             <div class="col-lg-4">
 
 
-
-                <div class="ticket-info-card">
-
-
-
-                    <h4 class="fw-bold mb-4">
-
-                        Ticket informatie
-
-                    </h4>
+                <ContentCard
+                    title="Ticket informatie"
+                    icon="bi-info-circle"
+                >
 
 
 
-
-                    <div class="info-item">
-
-                        <strong>Status</strong>
+                    <div class="info-item mb-3">
 
 
-                        <span
-                            class="badge"
-                            :class="statusClass(ticket.status)"
-                        >
+                        <strong>
+                            Status
+                        </strong>
 
-                            {{ ticket.status }}
 
-                        </span>
+                        <div class="mt-2">
+
+                            <BadgeStatus
+                                type="status"
+                                :value="ticket.status"
+                            />
+
+                        </div>
 
 
                     </div>
@@ -140,7 +93,7 @@
 
                     <div
                         v-if="authStore.user?.role === 'admin'"
-                        class="mt-3"
+                        class="mb-4"
                     >
 
 
@@ -180,7 +133,7 @@
 
 
 
-                    <div class="info-item">
+                    <div class="info-item mb-3">
 
 
                         <strong>
@@ -188,15 +141,14 @@
                         </strong>
 
 
+                        <div class="mt-2">
 
-                        <span
-                            class="badge"
-                            :class="priorityClass(ticket.priority)"
-                        >
+                            <BadgeStatus
+                                type="priority"
+                                :value="ticket.priority"
+                            />
 
-                            {{ ticket.priority }}
-
-                        </span>
+                        </div>
 
 
                     </div>
@@ -205,9 +157,10 @@
 
 
 
+
                     <div
                         v-if="authStore.user?.role === 'admin'"
-                        class="mt-3"
+                        class="mb-4"
                     >
 
 
@@ -241,19 +194,23 @@
 
 
 
+
                     <hr>
 
 
 
 
-                    <div class="info-text">
+
+
+                    <div class="info-text mb-3">
 
 
                         <strong>
                             Categorie
                         </strong>
 
-                        <p>
+
+                        <p class="mt-2 mb-0">
                             {{ ticket.category?.name }}
                         </p>
 
@@ -263,7 +220,10 @@
 
 
 
-                    <div class="info-text">
+
+
+
+                    <div class="info-text mb-3">
 
 
                         <strong>
@@ -271,7 +231,7 @@
                         </strong>
 
 
-                        <p>
+                        <p class="mt-2 mb-0">
                             {{ ticket.user?.name }}
                         </p>
 
@@ -280,30 +240,22 @@
 
 
 
-
-                    <div class="info-text">
-
+                    <div class="info-text mb-3">
 
                         <strong>
                             Toegewezen aan
                         </strong>
 
-
-                        <p>
+                        <p class="mt-2 mb-0">
                             {{ ticket.assignedAdmin?.name ?? 'Nog niet toegewezen' }}
                         </p>
 
-
                     </div>
-
-
-
 
 
                     <div
                         v-if="authStore.user?.role === 'admin'"
                     >
-
 
                         <select
                             v-model="selectedAdmin"
@@ -311,13 +263,9 @@
                             @change="assignAdmin"
                         >
 
-
                             <option :value="null">
-
                                 Niet toegewezen
-
                             </option>
-
 
 
                             <option
@@ -325,9 +273,7 @@
                                 :key="admin.id"
                                 :value="admin.id"
                             >
-
                                 {{ admin.name }}
-
                             </option>
 
 
@@ -337,8 +283,7 @@
                     </div>
 
 
-
-                </div>
+                </ContentCard>
 
 
             </div>
@@ -349,28 +294,23 @@
 
             <!-- Rechter kolom -->
 
+
             <div class="col-lg-8">
 
 
-                <div class="card">
 
-                    <div class="card-body">
+                <ContentCard
+                    title="Beschrijving"
+                    icon="bi-file-text"
+                    class="mb-4"
+                >
 
-
-                        <h4>
-                            Beschrijving
-                        </h4>
-
-
-                        <p>
-                            {{ ticket.description }}
-                        </p>
+                    <p class="mb-0">
+                        {{ ticket.description }}
+                    </p>
 
 
-                    </div>
-
-
-                </div>
+                </ContentCard>
 
 
 
@@ -379,112 +319,84 @@
                 <!-- Reacties -->
 
 
-                <div class="card mt-4">
+                <ContentCard
+                    title="Reacties"
+                    icon="bi-chat-left-text"
+                    class="mb-4"
+                >
 
 
-                    <div class="card-header">
-
-                        <h4 class="mb-0">
-                            Reacties
-                        </h4>
-
-                    </div>
-
-
-
-                    <div class="card-body">
+                    <div
+                        v-if="ticket.reactions?.length"
+                    >
 
 
                         <div
-                            v-if="ticket.reactions?.length"
+                            v-for="reaction in ticket.reactions"
+                            :key="reaction.id"
+                            class="reaction-item"
                         >
 
 
-                            <div
-    v-for="reaction in ticket.reactions"
-    :key="reaction.id"
-    class="reaction-item"
->
+                            <div class="reaction-avatar">
 
+                                {{ reaction.user?.name?.charAt(0).toUpperCase() }}
 
-    <div class="reaction-avatar">
-
-        {{ reaction.user?.name?.charAt(0).toUpperCase() }}
-
-    </div>
+                            </div>
 
 
 
-    <div class="reaction-content">
+                            <div class="reaction-content">
 
 
-        <div class="d-flex justify-content-between">
+                                <div class="d-flex justify-content-between">
 
 
-            <strong>
-
-                {{ reaction.user?.name }}
-
-            </strong>
+                                    <strong>
+                                        {{ reaction.user?.name }}
+                                    </strong>
 
 
-            <small class="text-muted">
-
-                {{ reaction.created_at }}
-
-            </small>
+                                    <small class="text-muted">
+                                        {{ reaction.created_at }}
+                                    </small>
 
 
-        </div>
-
-
-
-        <p class="mt-2 mb-0">
-
-            {{ reaction.message }}
-
-        </p>
-
-
-    </div>
-
-
-
-
-                                <strong>
-                                    {{ reaction.user?.name }}
-                                </strong>
-
-
-                                <small class="text-muted ms-2">
-                                    {{ reaction.created_at }}
-                                </small>
+                                </div>
 
 
 
                                 <p class="mt-2 mb-0">
+
                                     {{ reaction.message }}
+
                                 </p>
+
 
 
                             </div>
 
 
+
                         </div>
 
-
-                        <p
-                            v-else
-                            class="text-muted"
-                        >
-                            Nog geen reacties.
-                        </p>
 
 
                     </div>
 
 
-                </div>
+
+                    <EmptyState
+                        v-else
+                        icon="bi-chat"
+                        title="Geen reacties"
+                        message="Er zijn nog geen reacties geplaatst."
+                    />
+
+
+
+                </ContentCard>
+
 
 
 
@@ -492,45 +404,50 @@
                 <!-- Reactie toevoegen -->
 
 
-                <div class="card mt-4">
+                <ContentCard
+                    title="Reactie plaatsen"
+                    icon="bi-send"
+                >
 
 
-                    <div class="card-header">
+                    <textarea
 
-                        <h4>
-                            Reactie plaatsen
-                        </h4>
+                        v-model="newReaction"
 
-                    </div>
+                        class="form-control"
 
+                        rows="4"
 
-                    <div class="card-body">
+                        placeholder="Typ hier je reactie..."
 
-
-                        <textarea
-                            v-model="newReaction"
-                            class="form-control"
-                            rows="4"
-                            placeholder="Typ hier je reactie..."
-                        ></textarea>
+                    ></textarea>
 
 
-                        <button
-                            class="btn btn-primary mt-3"
-                            @click="addReaction"
-                            :disabled="sending"
-                        >
 
-                            {{ sending ? 'Versturen...' : 'Reactie plaatsen' }}
+                    <button
 
-                        </button>
+                        class="btn btn-primary mt-3"
+
+                        @click="addReaction"
+
+                        :disabled="sending"
+
+                    >
+
+                        <i class="bi bi-send me-2"></i>
 
 
-                    </div>
+                        {{ sending 
+                            ? 'Versturen...' 
+                            : 'Reactie plaatsen'
+                        }}
 
 
-                </div>
+                    </button>
 
+
+
+                </ContentCard>
 
 
 
@@ -543,81 +460,77 @@
 
 
 
-        <!-- Notities -->
+        <!-- Interne notities -->
 
-        <div
+
+        <ContentCard
+
             v-if="authStore.user?.role === 'admin'"
-            class="card mt-4"
+
+            title="Interne notities"
+
+            icon="bi-journal-text"
+
+            class="mt-4"
+
         >
 
-            <div class="card-header">
 
-                <h4>
-                    Interne notities
-                </h4>
+            <div
 
-            </div>
+                v-for="note in notes"
 
+                :key="note.id"
 
-            <div class="card-body">
+                class="note-item mb-4"
 
-
-                <div
-                    v-for="note in notes"
-                    :key="note.id"
-                    class="note-item"
-                >
-
-                    <strong>
-                        {{ note.user?.name }}
-                    </strong>
+            >
 
 
-                    <small class="text-muted ms-2">
-                        {{ note.created_at }}
-                    </small>
+                <strong>
+                    {{ note.user?.name }}
+                </strong>
 
 
-                    <p class="mt-2">
-                        {{ note.note }}
-                    </p>
+                <small class="text-muted ms-2">
+                    {{ note.created_at }}
+                </small>
 
 
-                    <button
-                        class="btn btn-warning btn-sm me-2"
-                        @click="editNote(note)"
-                    >
-                        Bewerken
-                    </button>
+                <p class="mt-2">
+                    {{ note.note }}
+                </p>
 
-
-                    <button
-                        class="btn btn-danger btn-sm"
-                        @click="deleteNote(note.id)"
-                    >
-                        Verwijderen
-                    </button>
-
-
-                </div>
-
-
-
-                <textarea
-                    v-model="newNote"
-                    class="form-control"
-                    rows="3"
-                    placeholder="Interne notitie..."
-                ></textarea>
 
 
                 <button
-                    class="btn btn-primary mt-3"
-                    @click="addNote"
-                    :disabled="savingNote"
+
+                    class="btn btn-warning btn-sm me-2"
+
+                    @click="editNote(note)"
+
                 >
 
-                    {{ savingNote ? 'Opslaan...' : 'Notitie toevoegen' }}
+                    <i class="bi bi-pencil me-1"></i>
+
+                    Bewerken
+
+                </button>
+
+
+
+
+                <button
+
+                    class="btn btn-danger btn-sm"
+
+                    @click="deleteNote(note.id)"
+
+                >
+
+                    <i class="bi bi-trash me-1"></i>
+
+                    Verwijderen
 
                 </button>
 
@@ -625,14 +538,53 @@
             </div>
 
 
-        </div>
+
+
+
+            <textarea
+
+                v-model="newNote"
+
+                class="form-control"
+
+                rows="3"
+
+                placeholder="Interne notitie..."
+
+            ></textarea>
+
+
+
+            <button
+
+                class="btn btn-primary mt-3"
+
+                @click="addNote"
+
+                :disabled="savingNote"
+
+            >
+
+                <i class="bi bi-plus-circle me-2"></i>
+
+
+                {{ savingNote 
+                    ? 'Opslaan...' 
+                    : 'Notitie toevoegen'
+                }}
+
+
+            </button>
+
+
+
+        </ContentCard>
 
 
 
     </div>
-
-
 </div>
+
 
 </template>
 
@@ -643,6 +595,7 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import api from '../api/axios'
+import BadgeStatus from "../components/BadgeStatus.vue"
 
 
 

@@ -3,6 +3,7 @@
 import { ref, onMounted } from 'vue'
 import api from '../api/axios'
 import PageHeader from '../components/PageHeader.vue'
+import CategoryCard from '../components/CategoryCard.vue'
 
 
 interface Category {
@@ -191,7 +192,6 @@ onMounted(loadCategories)
 <div class="container-fluid">
 
 
-
     <!-- Pagina header -->
 
     <PageHeader
@@ -231,6 +231,7 @@ onMounted(loadCategories)
 
 
 
+
     <div
         v-if="error"
         class="alert alert-danger mt-4"
@@ -250,14 +251,19 @@ onMounted(loadCategories)
 
 
     <ContentCard
+
         v-if="showForm"
+
         class="mt-4"
+
         :title="
             editingId
             ? 'Categorie aanpassen'
             : 'Nieuwe categorie'
         "
+
         icon="bi-tag"
+
     >
 
 
@@ -303,6 +309,7 @@ onMounted(loadCategories)
 
 
         </div>
+
 
 
 
@@ -394,6 +401,7 @@ onMounted(loadCategories)
     >
 
 
+
         <div class="row g-4">
 
 
@@ -409,12 +417,18 @@ onMounted(loadCategories)
 
 
 
+
                 <div class="card shadow-sm border-0 h-100">
 
 
-                    <div class="card-body">
+
+                    <div class="card-body d-flex flex-column">
 
 
+
+
+
+                        <!-- Icon -->
 
                         <div class="category-icon mb-3">
 
@@ -427,13 +441,24 @@ onMounted(loadCategories)
 
 
 
-                        <h4 class="fw-bold">
+
+
+                        <!-- Titel -->
+
+
+                        <h4 class="fw-bold mb-2">
 
                             {{ category.name }}
 
                         </h4>
 
 
+
+
+
+
+
+                        <!-- Beschrijving -->
 
 
                         <p class="text-muted">
@@ -445,40 +470,54 @@ onMounted(loadCategories)
 
 
 
-                        <div class="d-flex gap-2 mt-4">
-
-
-                            <button
-
-                                class="btn btn-primary flex-fill"
-
-                                @click="editCategory(category)"
-
-                            >
-
-                                <i class="bi bi-pencil me-2"></i>
-
-                                Bewerken
-
-                            </button>
 
 
 
+                        <!-- Knoppen altijd onderaan -->
 
-                            <button
 
-                                class="btn btn-danger flex-fill"
+                        <div class="mt-auto pt-4">
 
-                                @click="deleteCategory(category.id)"
 
-                            >
+                            <div class="d-flex gap-2">
 
-                                <i class="bi bi-trash me-2"></i>
 
-                                Verwijderen
+                                <button
 
-                            </button>
+                                    class="btn btn-primary flex-fill"
 
+                                    @click="editCategory(category)"
+
+                                >
+
+                                    <i class="bi bi-pencil me-2"></i>
+
+                                    Bewerken
+
+                                </button>
+
+
+
+
+
+
+
+                                <button
+
+                                    class="btn btn-danger flex-fill"
+
+                                    @click="deleteCategory(category.id)"
+
+                                >
+
+                                    <i class="bi bi-trash me-2"></i>
+
+                                    Verwijderen
+
+                                </button>
+
+
+                            </div>
 
 
                         </div>
@@ -492,10 +531,13 @@ onMounted(loadCategories)
 
 
 
+
+
             </div>
 
 
         </div>
+
 
 
     </ContentCard>

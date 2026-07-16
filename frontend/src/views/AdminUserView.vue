@@ -303,7 +303,7 @@ onMounted(loadUsers)
             <div class="card shadow-sm border-0 h-100">
 
 
-                <div class="card-body">
+                <div class="card-body d-flex flex-column">
 
 
                     <div class="d-flex align-items-center gap-3">
@@ -389,7 +389,10 @@ onMounted(loadUsers)
 
 
 
-                    <div class="d-flex gap-2 mt-4">
+
+                    <!-- Knoppen altijd onderaan -->
+
+                    <div class="d-flex gap-2 mt-auto pt-4">
 
 
                         <button
