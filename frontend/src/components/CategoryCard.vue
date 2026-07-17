@@ -2,11 +2,15 @@
 
     <BaseCard>
 
+        <!-- Categorie icoon -->
+
         <div class="category-icon mb-3">
 
             <i class="bi bi-tag-fill"></i>
 
         </div>
+
+        <!-- Naam -->
 
         <h4 class="fw-bold mb-2">
 
@@ -14,11 +18,15 @@
 
         </h4>
 
+        <!-- Omschrijving -->
+
         <p class="text-muted mb-0">
 
-            {{ category.description }}
+            {{ category.description || 'Geen omschrijving beschikbaar.' }}
 
         </p>
+
+        <!-- Knoppen -->
 
         <template #actions>
 
@@ -61,10 +69,8 @@ import BaseCard from './BaseCard.vue'
 interface Category {
 
     id: number
-
     name: string
-
-    description: string
+    description?: string
 
 }
 
@@ -76,9 +82,8 @@ defineProps<{
 
 const emit = defineEmits<{
 
-    (e: 'edit', category: Category): void
-
-    (e: 'delete', id: number): void
+    edit: [category: Category]
+    delete: [id: number]
 
 }>()
 
@@ -89,19 +94,15 @@ const emit = defineEmits<{
 .category-icon {
 
     width: 60px;
-
     height: 60px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     border-radius: 12px;
 
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
     background: #e7f1ff;
-
     color: #0d6efd;
 
     font-size: 28px;

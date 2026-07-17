@@ -1,56 +1,122 @@
 <template>
-    <div
-        class="ticket-card"
-        @click="$emit('open', ticket.id)"
-    >
-        <div class="ticket-header">
+
+    <BaseCard>
+
+        <!-- Ticket header -->
+
+        <div class="d-flex justify-content-between align-items-start mb-3">
+
             <div>
-                <h5 class="mb-0">
-                    #{{ ticket.id }} {{ ticket.title }}
+
+                <h5 class="fw-bold mb-1">
+
+                    #{{ ticket.id }}
+                    {{ ticket.title }}
+
                 </h5>
+
             </div>
+
+            <!-- Prioriteit indicator -->
 
             <span
                 class="priority-dot"
                 :class="priorityDotClass(ticket.priority)"
                 :title="ticket.priority"
             ></span>
+
         </div>
 
-        <div class="ticket-body">
+        <!-- Status en prioriteit -->
 
-            <div class="d-flex gap-2 mb-3">
-                <BadgeStatus
-                    type="status"
-                    :value="ticket.status"
-                />
+        <div class="d-flex gap-2 mb-4 flex-wrap">
 
-                <BadgeStatus
-                    type="priority"
-                    :value="ticket.priority"
-                />
-            </div>
+            <BadgeStatus
+                type="status"
+                :value="ticket.status"
+            />
+
+            <BadgeStatus
+                type="priority"
+                :value="ticket.priority"
+            />
+
+        </div>
+
+        <!-- Ticket informatie -->
+
+        <div class="text-muted">
 
             <p class="mb-2">
+
                 <i class="bi bi-tag me-2"></i>
-                {{ ticket.category?.name }}
+
+                {{ ticket.category?.name ?? 'Geen categorie' }}
+
             </p>
 
-            <p class="mb-0 text-muted">
+            <p class="mb-0">
+
                 <i class="bi bi-person me-2"></i>
-                {{ ticket.user?.name }}
+
+                {{ ticket.user?.name ?? 'Onbekend' }}
+
             </p>
 
         </div>
-    </div>
+
+        <!-- Acties -->
+
+        <template #actions>
+
+            <button
+                class="btn btn-primary w-100"
+                @click="$emit('open', ticket.id)"
+            >
+
+                <i class="bi bi-eye me-2"></i>
+
+                Ticket bekijken
+
+            </button>
+
+        </template>
+
+    </BaseCard>
+
 </template>
 
 <script setup lang="ts">
+
+import BaseCard from './BaseCard.vue'
 import BadgeStatus from './BadgeStatus.vue'
+
+interface Ticket {
+
+    id: number
+    title: string
+    status: string
+    priority: string
+
+    category?: {
+        name: string
+    }
+
+    user?: {
+        name: string
+    }
+
+}
 
 defineProps<{
 
-    ticket: any
+    ticket: Ticket
+
+}>()
+
+defineEmits<{
+
+    open: [id: number]
 
 }>()
 
@@ -73,75 +139,21 @@ function priorityDotClass(priority: string) {
     }
 
 }
+
 </script>
 
 <style scoped>
 
-.ticket-card {
-
-    background: white;
-
-    border-radius: 18px;
-
-    overflow: hidden;
-
-    cursor: pointer;
-
-    height: 100%;
-
-    box-shadow:
-        0 8px 24px rgba(0,0,0,.08);
-
-    transition: .25s;
-
-}
-
-.ticket-card:hover {
-
-    transform: translateY(-5px);
-
-    box-shadow:
-        0 14px 30px rgba(0,0,0,.15);
-
-}
-
-.ticket-header {
-
-    background: #2563eb;
-
-    color: white;
-
-    padding: 14px 18px;
-
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-}
-
-.ticket-header h5 {
-
-    margin: 0;
-
-    font-size: 16px;
-
-    font-weight: 700;
-
-}
-
-/* Prioriteit stip */
-
 .priority-dot {
 
     width: 14px;
-
     height: 14px;
 
     border-radius: 50%;
 
     border: 2px solid white;
+
+    flex-shrink: 0;
 
 }
 
@@ -160,12 +172,6 @@ function priorityDotClass(priority: string) {
 .dot-low {
 
     background: #198754;
-
-}
-
-.ticket-body {
-
-    padding: 22px;
 
 }
 

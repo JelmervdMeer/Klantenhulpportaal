@@ -1,29 +1,34 @@
-
-
 <template>
 
 <div class="container-fluid">
 
-    <!-- Laden -->
+
+    <!-- Meldingen -->
 
     <div
         v-if="loading"
-        class="alert alert-info"
+        class="alert alert-info mt-4"
     >
+        <i class="bi bi-hourglass-split me-2"></i>
         Ticket laden...
     </div>
 
 
+
     <div
         v-if="error"
-        class="alert alert-danger"
+        class="alert alert-danger mt-4"
     >
+        <i class="bi bi-exclamation-triangle me-2"></i>
         {{ error }}
     </div>
 
 
 
+
+
     <div v-if="ticket">
+
 
 
         <!-- Pagina header -->
@@ -44,20 +49,26 @@
 
             </button>
 
+
         </PageHeader>
 
 
 
 
 
-        <div class="row g-4">
 
 
 
-            <!-- Linkerkant -->
+        <div class="row g-4 mt-1">
 
 
-            <div class="col-lg-4">
+
+
+
+            <!-- Linker kolom -->
+
+            <div class="col-xl-4">
+
 
 
                 <ContentCard
@@ -67,22 +78,22 @@
 
 
 
-                    <div class="info-item mb-3">
+
+                    <!-- Status -->
 
 
-                        <strong>
+                    <div class="ticket-detail-item">
+
+
+                        <label>
                             Status
-                        </strong>
+                        </label>
 
 
-                        <div class="mt-2">
-
-                            <BadgeStatus
-                                type="status"
-                                :value="ticket.status"
-                            />
-
-                        </div>
+                        <BadgeStatus
+                            type="status"
+                            :value="ticket.status"
+                        />
 
 
                     </div>
@@ -91,9 +102,12 @@
 
 
 
+                    <!-- Status wijzigen admin -->
+
+
                     <div
                         v-if="authStore.user?.role === 'admin'"
-                        class="mb-4"
+                        class="mt-3"
                     >
 
 
@@ -121,7 +135,10 @@
                         </select>
 
 
+
                     </div>
+
+
 
 
 
@@ -133,22 +150,23 @@
 
 
 
-                    <div class="info-item mb-3">
 
 
-                        <strong>
+                    <!-- Prioriteit -->
+
+
+                    <div class="ticket-detail-item">
+
+
+                        <label>
                             Prioriteit
-                        </strong>
+                        </label>
 
 
-                        <div class="mt-2">
-
-                            <BadgeStatus
-                                type="priority"
-                                :value="ticket.priority"
-                            />
-
-                        </div>
+                        <BadgeStatus
+                            type="priority"
+                            :value="ticket.priority"
+                        />
 
 
                     </div>
@@ -158,9 +176,13 @@
 
 
 
+
+                    <!-- Prioriteit wijzigen -->
+
+
                     <div
                         v-if="authStore.user?.role === 'admin'"
-                        class="mb-4"
+                        class="mt-3"
                     >
 
 
@@ -195,6 +217,8 @@
 
 
 
+
+
                     <hr>
 
 
@@ -202,16 +226,25 @@
 
 
 
-                    <div class="info-text mb-3">
 
 
-                        <strong>
+                    <!-- Categorie -->
+
+
+                    <div class="ticket-detail-item">
+
+
+                        <label>
                             Categorie
-                        </strong>
+                        </label>
 
 
-                        <p class="mt-2 mb-0">
-                            {{ ticket.category?.name }}
+                        <p>
+
+                            <i class="bi bi-tag me-2"></i>
+
+                            {{ ticket.category?.name ?? 'Geen categorie' }}
+
                         </p>
 
 
@@ -223,16 +256,24 @@
 
 
 
-                    <div class="info-text mb-3">
+
+                    <!-- Aangemaakt door -->
 
 
-                        <strong>
+                    <div class="ticket-detail-item">
+
+
+                        <label>
                             Aangemaakt door
-                        </strong>
+                        </label>
 
 
-                        <p class="mt-2 mb-0">
-                            {{ ticket.user?.name }}
+                        <p>
+
+                            <i class="bi bi-person me-2"></i>
+
+                            {{ ticket.user?.name ?? 'Onbekend' }}
+
                         </p>
 
 
@@ -240,22 +281,51 @@
 
 
 
-                    <div class="info-text mb-3">
 
-                        <strong>
+
+
+
+                    <!-- Toegewezen admin -->
+
+
+                    <div class="ticket-detail-item">
+
+
+                        <label>
                             Toegewezen aan
-                        </strong>
+                        </label>
 
-                        <p class="mt-2 mb-0">
-                            {{ ticket.assignedAdmin?.name ?? 'Nog niet toegewezen' }}
+
+                        <p>
+
+                            <i class="bi bi-person-badge me-2"></i>
+
+
+                            {{ 
+                                ticket.assignedAdmin?.name 
+                                ?? 'Nog niet toegewezen' 
+                            }}
+
+
                         </p>
 
+
                     </div>
+
+
+
+
+
+
+
+                    <!-- Admin toewijzen -->
 
 
                     <div
                         v-if="authStore.user?.role === 'admin'"
+                        class="mt-3"
                     >
+
 
                         <select
                             v-model="selectedAdmin"
@@ -263,9 +333,14 @@
                             @change="assignAdmin"
                         >
 
+
                             <option :value="null">
+
                                 Niet toegewezen
+
                             </option>
+
+
 
 
                             <option
@@ -273,11 +348,50 @@
                                 :key="admin.id"
                                 :value="admin.id"
                             >
+
                                 {{ admin.name }}
+
                             </option>
 
 
+
                         </select>
+
+
+
+                    </div>
+
+
+
+
+
+                </ContentCard>
+
+
+
+
+            </div>
+                        <!-- Rechter kolom -->
+
+            <div class="col-xl-8">
+
+
+
+
+
+                <!-- Beschrijving -->
+
+                <ContentCard
+                    title="Beschrijving"
+                    icon="bi-file-text"
+                    class="mb-4"
+                >
+
+
+                    <div class="ticket-description">
+
+
+                        {{ ticket.description }}
 
 
                     </div>
@@ -286,31 +400,8 @@
                 </ContentCard>
 
 
-            </div>
 
 
-
-
-
-            <!-- Rechter kolom -->
-
-
-            <div class="col-lg-8">
-
-
-
-                <ContentCard
-                    title="Beschrijving"
-                    icon="bi-file-text"
-                    class="mb-4"
-                >
-
-                    <p class="mb-0">
-                        {{ ticket.description }}
-                    </p>
-
-
-                </ContentCard>
 
 
 
@@ -326,55 +417,92 @@
                 >
 
 
+
                     <div
                         v-if="ticket.reactions?.length"
                     >
 
 
+
                         <div
                             v-for="reaction in ticket.reactions"
                             :key="reaction.id"
-                            class="reaction-item"
+                            class="reaction-card"
                         >
+
+
+
+
+                            <!-- Avatar -->
 
 
                             <div class="reaction-avatar">
 
-                                {{ reaction.user?.name?.charAt(0).toUpperCase() }}
+
+                                {{
+                                    reaction.user?.name
+                                    ?.charAt(0)
+                                    .toUpperCase()
+                                }}
+
 
                             </div>
 
 
 
+
+
+
+
+                            <!-- Reactie inhoud -->
+
+
                             <div class="reaction-content">
 
 
-                                <div class="d-flex justify-content-between">
+
+                                <div class="d-flex justify-content-between align-items-center">
 
 
                                     <strong>
+
                                         {{ reaction.user?.name }}
+
                                     </strong>
 
 
+
                                     <small class="text-muted">
+
+
                                         {{ reaction.created_at }}
+
+
                                     </small>
+
 
 
                                 </div>
 
 
 
-                                <p class="mt-2 mb-0">
+
+
+
+                                <p class="mb-0 mt-2">
+
 
                                     {{ reaction.message }}
+
 
                                 </p>
 
 
 
+
+
                             </div>
+
 
 
 
@@ -382,16 +510,28 @@
 
 
 
+
+
                     </div>
 
 
 
+
+
+
                     <EmptyState
+
                         v-else
+
                         icon="bi-chat"
+
                         title="Geen reacties"
-                        message="Er zijn nog geen reacties geplaatst."
+
+                        text="Er zijn nog geen reacties geplaatst."
+
                     />
+
+
 
 
 
@@ -401,13 +541,21 @@
 
 
 
+
+
+
+
                 <!-- Reactie toevoegen -->
 
 
                 <ContentCard
+
                     title="Reactie plaatsen"
+
                     icon="bi-send"
+
                 >
+
 
 
                     <textarea
@@ -424,6 +572,8 @@
 
 
 
+
+
                     <button
 
                         class="btn btn-primary mt-3"
@@ -434,16 +584,23 @@
 
                     >
 
+
+
                         <i class="bi bi-send me-2"></i>
 
 
-                        {{ sending 
-                            ? 'Versturen...' 
+
+
+                        {{
+                            sending
+                            ? 'Versturen...'
                             : 'Reactie plaatsen'
                         }}
 
 
+
                     </button>
+
 
 
 
@@ -451,10 +608,15 @@
 
 
 
+
+
             </div>
 
 
         </div>
+
+
+
 
 
 
@@ -476,66 +638,152 @@
         >
 
 
+
+
             <div
-
-                v-for="note in notes"
-
-                :key="note.id"
-
-                class="note-item mb-4"
-
+                v-if="notes.length"
             >
 
 
-                <strong>
-                    {{ note.user?.name }}
-                </strong>
 
+                <div
 
-                <small class="text-muted ms-2">
-                    {{ note.created_at }}
-                </small>
+                    v-for="note in notes"
 
+                    :key="note.id"
 
-                <p class="mt-2">
-                    {{ note.note }}
-                </p>
-
-
-
-                <button
-
-                    class="btn btn-warning btn-sm me-2"
-
-                    @click="editNote(note)"
+                    class="note-card"
 
                 >
 
-                    <i class="bi bi-pencil me-1"></i>
-
-                    Bewerken
-
-                </button>
 
 
 
 
-                <button
+                    <div class="d-flex justify-content-between">
 
-                    class="btn btn-danger btn-sm"
 
-                    @click="deleteNote(note.id)"
+                        <strong>
 
-                >
 
-                    <i class="bi bi-trash me-1"></i>
+                            <i class="bi bi-person me-2"></i>
 
-                    Verwijderen
 
-                </button>
+                            {{ note.user?.name }}
+
+
+                        </strong>
+
+
+
+
+                        <small class="text-muted">
+
+
+                            {{ note.created_at }}
+
+
+                        </small>
+
+
+
+                    </div>
+
+
+
+
+
+
+
+                    <p class="mt-3 mb-3">
+
+
+                        {{ note.note }}
+
+
+                    </p>
+
+
+
+
+
+
+
+                    <div>
+
+
+                        <button
+
+                            class="btn btn-warning btn-sm me-2"
+
+                            @click="editNote(note)"
+
+                        >
+
+
+                            <i class="bi bi-pencil me-1"></i>
+
+
+                            Bewerken
+
+
+                        </button>
+
+
+
+
+
+
+                        <button
+
+                            class="btn btn-danger btn-sm"
+
+                            @click="deleteNote(note.id)"
+
+                        >
+
+
+                            <i class="bi bi-trash me-1"></i>
+
+
+                            Verwijderen
+
+
+                        </button>
+
+
+
+                    </div>
+
+
+
+
+                </div>
+
+
 
 
             </div>
+
+
+
+
+
+
+
+            <EmptyState
+
+                v-else
+
+                icon="bi-journal"
+
+                title="Geen notities"
+
+                text="Er zijn nog geen interne notities."
+
+            />
+
+
 
 
 
@@ -545,13 +793,16 @@
 
                 v-model="newNote"
 
-                class="form-control"
+                class="form-control mt-4"
 
                 rows="3"
 
                 placeholder="Interne notitie..."
 
             ></textarea>
+
+
+
 
 
 
@@ -565,16 +816,23 @@
 
             >
 
+
+
                 <i class="bi bi-plus-circle me-2"></i>
 
 
-                {{ savingNote 
-                    ? 'Opslaan...' 
+
+                {{
+                    savingNote
+                    ? 'Opslaan...'
                     : 'Notitie toevoegen'
                 }}
 
 
+
             </button>
+
+
 
 
 
@@ -582,82 +840,93 @@
 
 
 
+
+
+
     </div>
+
+
 </div>
 
 
 </template>
 
-
 <script setup lang="ts">
 
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { useAuthStore } from '../stores/auth'
+
 import api from '../api/axios'
-import BadgeStatus from "../components/BadgeStatus.vue"
+import { useAuthStore } from '../stores/auth'
+
+import BadgeStatus from '../components/BadgeStatus.vue'
+
+
+interface User {
+
+    id:number
+    name:string
+
+}
+
+
+
+interface Category {
+
+    name:string
+
+}
+
+
+
+interface Reaction {
+
+
+    id:number
+
+    message:string
+
+    created_at:string
+
+
+    user?:User
+
+
+}
 
 
 
 interface Ticket {
 
-    id: number
 
-    title: string
+    id:number
 
-    description: string
+    title:string
 
-    status: string
+    description:string
 
-    priority: string
+    status:string
 
-
-    category?: {
-
-        name: string
-
-    }
+    priority:string
 
 
-    user?: {
-
-        name: string
-
-    }
+    category?:Category
 
 
-    reactions?: {
-
-        id: number
-
-        message: string
-
-        created_at: string
+    user?:User
 
 
-        user?: {
-
-            name: string
-
-        }
-
-    }[]
+    reactions?:Reaction[]
 
 
+    assigned_to?:number | null
 
-    assigned_to?: number | null
 
-
-    assignedAdmin?: {
-
-        id: number
-
-        name: string
-
-    }
+    assignedAdmin?:User
 
 
 }
+
 
 
 
@@ -671,7 +940,10 @@ interface Admin {
 
 
 
+
+
 interface Note {
+
 
     id:number
 
@@ -680,13 +952,14 @@ interface Note {
     created_at:string
 
 
-    user?: {
+    user?:User
 
-        name:string
-
-    }
 
 }
+
+
+
+
 
 
 
@@ -696,7 +969,10 @@ const authStore = useAuthStore()
 
 
 
+
+
 const ticket = ref<Ticket | null>(null)
+
 
 
 const loading = ref(true)
@@ -704,6 +980,10 @@ const loading = ref(true)
 const error = ref('')
 
 
+
+
+
+// Reacties
 
 const newReaction = ref('')
 
@@ -715,17 +995,35 @@ const reactionMessage = ref('')
 
 
 
+
+
+
+
+// Status
+
 const selectedStatus = ref('')
 
 const statusMessage = ref('')
 
 
 
+
+
+
+
+// Prioriteit
+
 const selectedPriority = ref('')
 
 const priorityMessage = ref('')
 
 
+
+
+
+
+
+// Admin toewijzen
 
 const admins = ref<Admin[]>([])
 
@@ -734,6 +1032,12 @@ const selectedAdmin = ref<number | null>(null)
 const assignMessage = ref('')
 
 
+
+
+
+
+
+// Notities
 
 const notes = ref<Note[]>([])
 
@@ -747,268 +1051,407 @@ const savingNote = ref(false)
 
 
 
+
+
+
+
 const editingNoteId = ref<number | null>(null)
 
 const editingNoteText = ref('')
 
 
 
-const editingReactionId = ref<number | null>(null)
 
-const editingReactionText = ref('')
 
 
 
 async function loadTicket() {
 
+
     try {
+
 
         const response = await api.get(
             `/tickets/${route.params.id}`
         )
 
+
+
         ticket.value = response.data.ticket
 
-        selectedStatus.value = response.data.ticket.status
 
-        selectedPriority.value = response.data.ticket.priority
 
-        selectedAdmin.value = response.data.ticket.assigned_to
+        selectedStatus.value =
+            response.data.ticket.status
+
+
+
+        selectedPriority.value =
+            response.data.ticket.priority
+
+
+
+        selectedAdmin.value =
+            response.data.ticket.assigned_to
+
+
 
     } catch {
 
-        error.value = 'Ticket kon niet worden geladen.'
+
+        error.value =
+            'Ticket kon niet worden geladen.'
+
+
 
     } finally {
+
 
         loading.value = false
 
+
     }
+
 
 }
 
-async function addReaction() {
 
-    if (!newReaction.value.trim()) {
-        reactionError.value = 'Vul eerst een reactie in.'
-        return
-    }
 
-    try {
 
-        sending.value = true
-        reactionError.value = ''
 
-        await api.post(
-            `/tickets/${route.params.id}/reactions`,
-            {
-                message: newReaction.value
-            }
-        )
 
-        newReaction.value = ''
 
-        await loadTicket()
-
-    } catch {
-
-        reactionError.value = 'Reactie kon niet worden geplaatst.'
-
-    } finally {
-
-        sending.value = false
-
-    }
-
-}
 
 
 async function updateStatus() {
 
-    console.log('Status wijzigen:', selectedStatus.value)
 
     if (!ticket.value) return
 
+
+
     try {
 
-        statusMessage.value = ''
 
         await api.put(
+
             `/tickets/${ticket.value.id}/status`,
+
             {
-                status: selectedStatus.value
+                status:selectedStatus.value
             }
+
         )
 
-        statusMessage.value = 'Status succesvol gewijzigd.'
 
-setTimeout(() => {
-    statusMessage.value = ''
-}, 3000)
+
+        ticket.value.status =
+            selectedStatus.value
+
+
+
+        statusMessage.value =
+            'Status succesvol gewijzigd.'
+
+
 
     } catch {
 
-        statusMessage.value = 'Status kon niet worden gewijzigd.'
+
+        statusMessage.value =
+            'Status kon niet worden gewijzigd.'
+
 
     }
 
+
 }
 
-function statusClass(status: string) {
 
-    switch (status) {
 
-        case 'Open':
-            return 'bg-primary'
 
-        case 'In behandeling':
-            return 'bg-warning text-dark'
 
-        case 'Gesloten':
-            return 'bg-success'
 
-        default:
-            return 'bg-secondary'
 
-    }
-}
+
 
 async function updatePriority() {
 
+
     if (!ticket.value) return
+
+
 
     try {
 
-        priorityMessage.value = ''
 
         await api.put(
+
             `/tickets/${ticket.value.id}/priority`,
+
             {
-                priority: selectedPriority.value
+                priority:selectedPriority.value
             }
+
         )
 
-        ticket.value.priority = selectedPriority.value
+
+
+        ticket.value.priority =
+            selectedPriority.value
+
+
 
         priorityMessage.value =
             'Prioriteit succesvol gewijzigd.'
 
+
+
     } catch {
+
 
         priorityMessage.value =
             'Prioriteit kon niet worden gewijzigd.'
 
-    }
-
-}
-
-function priorityClass(priority: string) {
-
-    switch (priority) {
-
-        case 'Laag':
-            return 'bg-primary'
-
-        case 'Normaal':
-            return 'bg-warning text-dark'
-
-        case 'Hoog':
-            return 'bg-danger'
-
-        default:
-            return 'bg-secondary'
 
     }
 
+
 }
+
+
+
+
+
+
+
+
+
+async function addReaction() {
+
+
+    if (!newReaction.value.trim()) {
+
+
+        reactionError.value =
+            'Vul eerst een reactie in.'
+
+
+        return
+
+    }
+
+
+
+
+    try {
+
+
+        sending.value = true
+
+
+
+        await api.post(
+
+            `/tickets/${route.params.id}/reactions`,
+
+            {
+                message:newReaction.value
+            }
+
+        )
+
+
+
+        newReaction.value = ''
+
+
+
+        await loadTicket()
+
+
+
+    } catch {
+
+
+        reactionError.value =
+            'Reactie kon niet worden geplaatst.'
+
+
+
+    } finally {
+
+
+        sending.value = false
+
+
+    }
+
+
+}
+
+
+
+
+
+
+
+
 
 async function loadAdmins() {
 
+
     try {
 
-        const response = await api.get('/admins')
 
-        admins.value = response.data.admins
+        const response =
+            await api.get('/admins')
+
+
+
+        admins.value =
+            response.data.admins
+
+
 
     } catch {
 
-        console.error('Administrators konden niet worden geladen.')
+
+        console.error(
+            'Admins laden mislukt'
+        )
+
 
     }
 
+
 }
+
+
+
+
+
+
+
+
 
 async function assignAdmin() {
 
+
     if (!ticket.value) return
+
+
 
     try {
 
-        assignMessage.value = ''
 
         await api.put(
+
             `/tickets/${ticket.value.id}/assign`,
+
             {
-                assigned_to: selectedAdmin.value
+                assigned_to:selectedAdmin.value
             }
+
         )
 
-        const admin = admins.value.find(
-            admin => admin.id === selectedAdmin.value
-        )
 
-        ticket.value.assigned_to = selectedAdmin.value
 
-        ticket.value.assignedAdmin = admin
+        const admin =
+            admins.value.find(
+
+                item =>
+                item.id === selectedAdmin.value
+
+            )
+
+
+
+        ticket.value.assignedAdmin =
+            admin
+
+
 
         assignMessage.value =
-            'Administrator succesvol toegewezen.'
+            'Administrator toegewezen.'
 
-        setTimeout(() => {
-            assignMessage.value = ''
-        }, 3000)
+
 
     } catch {
+
 
         assignMessage.value =
             'Administrator kon niet worden toegewezen.'
 
+
+
     }
+
 
 }
 
+
+
+
+
+
+
+
+
 async function loadNotes() {
+
 
     try {
 
-        const response = await api.get(
-            `/tickets/${route.params.id}/notes`
-        )
+
+        const response =
+            await api.get(
+
+                `/tickets/${route.params.id}/notes`
+
+            )
 
 
-        notes.value = response.data.notes
+
+        notes.value =
+            response.data.notes
+
 
 
     } catch {
 
+
         noteError.value =
             'Notities konden niet worden geladen.'
 
+
     }
 
+
 }
+
+
+
+
+
+
+
+
 
 async function addNote() {
 
 
     if (!newNote.value.trim()) {
 
+
         noteError.value =
             'Vul eerst een notitie in.'
+
 
         return
 
     }
+
 
 
 
@@ -1017,25 +1460,21 @@ async function addNote() {
 
         savingNote.value = true
 
-        noteError.value = ''
-
 
 
         await api.post(
+
             `/tickets/${route.params.id}/notes`,
+
             {
-                note: newNote.value
+                note:newNote.value
             }
+
         )
 
 
 
         newNote.value = ''
-
-
-
-        noteMessage.value =
-            'Notitie toegevoegd.'
 
 
 
@@ -1050,10 +1489,12 @@ async function addNote() {
             'Notitie kon niet worden toegevoegd.'
 
 
+
     } finally {
 
 
         savingNote.value = false
+
 
     }
 
@@ -1063,77 +1504,67 @@ async function addNote() {
 async function deleteNote(id:number) {
 
 
-    if(!confirm('Notitie verwijderen?')) {
+    if (!confirm('Notitie verwijderen?')) {
 
         return
 
     }
 
-
-    await api.delete(
-        `/notes/${id}`
-    )
-
-
-    await loadNotes()
-
-}
-
-function editReaction(reaction: any) {
-
-    editingReactionId.value = reaction.id
-
-    editingReactionText.value = reaction.message
-
-}
-
-async function updateReaction() {
-
-    if (!editingReactionId.value) {
-        return
-    }
 
 
     try {
 
-        await api.put(
-            `/reactions/${editingReactionId.value}`,
-            {
-                message: editingReactionText.value
-            }
+
+        await api.delete(
+            `/notes/${id}`
         )
 
 
-        reactionMessage.value =
-            'Reactie aangepast.'
+        await loadNotes()
 
-
-        editingReactionId.value = null
-
-        editingReactionText.value = ''
-
-
-        await loadTicket()
 
 
     } catch {
 
-        reactionError.value =
-            'Reactie kon niet worden aangepast.'
+
+        noteError.value =
+            'Notitie kon niet worden verwijderd.'
+
 
     }
 
-}
-
-function editNote(note: Note) {
-
-    editingNoteId.value = note.id
-
-    editingNoteText.value = note.note
 
 }
+
+
+
+
+
+
+
+
+function editNote(note:Note) {
+
+
+    editingNoteId.value =
+        note.id
+
+
+    editingNoteText.value =
+        note.note
+
+
+}
+
+
+
+
+
+
+
 
 async function updateNote() {
+
 
     if (!editingNoteId.value) {
 
@@ -1142,18 +1573,20 @@ async function updateNote() {
     }
 
 
+
     try {
 
+
         await api.put(
+
             `/notes/${editingNoteId.value}`,
+
             {
-                note: editingNoteText.value
+                note:editingNoteText.value
             }
+
         )
 
-
-        noteMessage.value =
-            'Notitie aangepast.'
 
 
         editingNoteId.value = null
@@ -1161,131 +1594,60 @@ async function updateNote() {
         editingNoteText.value = ''
 
 
+
         await loadNotes()
+
 
 
     } catch {
 
+
         noteError.value =
             'Notitie kon niet worden aangepast.'
 
+
+
     }
+
 
 }
 
 
-onMounted(async () => {
+
+
+
+
+
+
+
+onMounted(async()=>{
+
 
     await loadTicket()
 
 
-    if(authStore.user?.role === 'admin') {
+
+    if(authStore.user?.role === 'admin'){
+
 
         await loadAdmins()
 
+
         await loadNotes()
+
 
     }
 
+
 })
-
-
 
 
 
 </script>
 <style scoped>
 
-.card {
 
-    border: none;
-
-    border-radius: 16px;
-
-    box-shadow:
-        0 8px 24px rgba(0,0,0,.08);
-
-}
-
-
-.card-header {
-
-    background:white;
-
-    border-bottom:1px solid #e5e7eb;
-
-    border-radius:16px 16px 0 0 !important;
-
-    font-weight:600;
-
-}
-
-
-
-h1 {
-
-    letter-spacing:-0.5px;
-
-}
-
-
-
-.badge {
-
-    padding:8px 12px;
-
-    border-radius:10px;
-
-}
-
-
-
-.btn {
-
-    border-radius:10px;
-
-}
-
-
-
-.form-select,
-.form-control {
-
-    border-radius:10px;
-
-    border:1px solid #d1d5db;
-
-}
-
-
-
-.form-control:focus,
-.form-select:focus {
-
-    box-shadow:
-        0 0 0 .2rem rgba(13,110,253,.15);
-
-}
-
-
-
-.ticket-info-item {
-
-    margin-bottom:15px;
-
-}
-
-
-
-.border-bottom {
-
-    border-color:#e5e7eb !important;
-
-}
-
-
-
-.card-body p {
+.ticket-info {
 
     line-height:1.7;
 
@@ -1293,44 +1655,94 @@ h1 {
 
 
 
-textarea {
+.info-block {
 
-    resize:none;
+    margin-bottom:22px;
 
 }
 
 
 
-/* Reacties */
+.info-block strong {
 
-.reaction {
+    display:block;
 
-    background:#f8fafc;
+    margin-bottom:8px;
+
+    font-weight:700;
+
+    color:#334155;
+
+}
+
+
+
+.info-value {
+
+    color:#64748b;
+
+}
+
+
+
+
+
+
+
+.form-select,
+.form-control {
 
     border-radius:12px;
 
-    padding:15px;
+    padding:10px 14px;
+
+    border:1px solid #d1d5db;
 
 }
 
 
 
-/* Admin notities */
+.form-select:focus,
+.form-control:focus {
 
-.note {
+    border-color:#2563eb;
 
-    background:#fff7ed;
+    box-shadow:
+        0 0 0 .2rem rgba(37,99,235,.15);
+
+}
+
+
+
+
+
+
+
+
+.btn {
 
     border-radius:12px;
 
-    padding:15px;
+    font-weight:600;
 
 }
 
-/* Reactie timeline */
+
+
+
+
+
+
+
+
+/*
+    Reacties
+*/
+
 
 
 .reaction-item {
+
 
     display:flex;
 
@@ -1342,19 +1754,40 @@ textarea {
 
     background:#f8fafc;
 
-    border-radius:14px;
+    border-radius:16px;
 
     border-left:4px solid #2563eb;
+
+    transition:.25s ease;
+
 
 }
 
 
 
+.reaction-item:hover {
+
+
+    transform:translateX(4px);
+
+    background:#f1f5f9;
+
+
+}
+
+
+
+
+
+
 .reaction-avatar {
 
-    width:42px;
 
-    height:42px;
+    width:45px;
+
+    height:45px;
+
+    flex-shrink:0;
 
     border-radius:50%;
 
@@ -1364,15 +1797,15 @@ textarea {
 
     display:flex;
 
-    align-items:center;
-
     justify-content:center;
 
-    font-weight:bold;
+    align-items:center;
 
-    flex-shrink:0;
+    font-weight:700;
 
 }
+
+
 
 
 
@@ -1384,13 +1817,34 @@ textarea {
 
 
 
+
+
+
 .reaction-content p {
 
-    color:#334155;
+    color:#475569;
+
+    line-height:1.6;
 
 }
 
+
+
+
+
+
+
+
+
+
+/*
+    Notities
+*/
+
+
+
 .note-item {
+
 
     background:#fff7ed;
 
@@ -1398,227 +1852,108 @@ textarea {
 
     padding:18px;
 
-    border-radius:14px;
+    border-radius:16px;
 
-    margin-bottom:15px;
+    margin-bottom:18px;
 
-}
+    transition:.25s ease;
 
-.page-header {
-
-    background:linear-gradient(
-        135deg,
-        #0d6efd,
-        #2563eb
-    );
-
-    color:white;
-
-    padding:30px;
-
-    border-radius:18px;
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    box-shadow:
-        0 8px 24px rgba(0,0,0,.15);
 
 }
 
 
 
-.page-header p {
 
-    color:rgba(255,255,255,.8);
+.note-item:hover {
+
+
+    transform:translateX(4px);
+
 
 }
 
 
 
-.back-btn {
 
-    border-radius:12px;
 
-    font-weight:600;
+
+
+
+
+
+/*
+    Ticket detail layout
+*/
+
+
+
+.ticket-description {
+
+
+    color:#475569;
+
+    line-height:1.8;
+
 
 }
 
 
 
-.ticket-info-card,
-.card {
 
+.ticket-meta {
 
-    background:white;
-
-    border:none;
-
-    border-radius:18px;
-
-    padding:25px;
-
-    box-shadow:
-        0 8px 24px rgba(0,0,0,.08);
-
-}
-
-
-
-.info-item {
 
     display:flex;
 
     flex-direction:column;
 
-    gap:10px;
-
-}
-
-
-
-.info-text {
-
-    margin-bottom:18px;
-
-}
-
-
-
-.info-text p {
-
-    margin-top:5px;
-
-    color:#64748b;
-
-}
-
-
-
-.badge {
-
-    width:max-content;
-
-    padding:8px 14px;
-
-    border-radius:12px;
-
-}
-
-
-
-.status-large {
-
-    font-size:16px;
-
-}
-
-
-
-
-
-.form-select,
-.form-control {
-
-    border-radius:12px;
-
-}
-
-
-
-.btn {
-
-    border-radius:12px;
-
-}
-
-
-
-
-.reaction-item {
-
-
-    display:flex;
-
-    gap:15px;
-
-    padding:18px;
-
-
-    background:#f8fafc;
-
-
-    border-radius:14px;
-
-
-    border-left:4px solid #2563eb;
-
-
-    margin-bottom:15px;
+    gap:14px;
 
 
 }
 
 
 
-.reaction-avatar {
-
-
-    width:45px;
-
-    height:45px;
-
-
-    border-radius:50%;
-
-
-    background:#2563eb;
-
-    color:white;
-
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-
-    font-weight:bold;
-
-
-}
 
 
 
-.note-item {
 
-
-    background:#fff7ed;
-
-
-    border-left:4px solid #f97316;
-
-
-    padding:18px;
-
-
-    border-radius:14px;
-
-
-}
 
 
 
 textarea {
 
+
     resize:none;
+
 
 }
 
+
+
+
+
+
+
+
+
+/*
+    Kleine schermen
+*/
+
+
+
+@media(max-width:768px){
+
+
+    .reaction-item {
+
+        flex-direction:column;
+
+    }
+
+
+}
 
 
 </style>

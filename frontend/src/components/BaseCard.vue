@@ -1,67 +1,92 @@
 <template>
 
-<div
-    class="base-card"
-    :class="{ clickable }"
->
+    <div class="base-card card shadow-sm border-0 h-100">
 
 
-    <!-- Header -->
-
-    <div
-        v-if="title || icon"
-        class="card-header-custom"
-    >
-
-        <h4 class="fw-bold mb-0">
-
-            <i
-                v-if="icon"
-                :class="`bi ${icon} me-2`"
-            ></i>
+        <div class="card-body d-flex flex-column">
 
 
-            {{ title }}
+            <!-- Titel gedeelte (optioneel) -->
 
-        </h4>
+
+            <div
+                v-if="title || icon"
+                class="d-flex align-items-center mb-4"
+            >
+
+
+                <div
+                    v-if="icon"
+                    class="card-icon me-3"
+                >
+
+                    <i
+                        class="bi"
+                        :class="icon"
+                    ></i>
+
+
+                </div>
+
+
+
+
+                <h4
+                    v-if="title"
+                    class="fw-bold mb-0"
+                >
+
+                    {{ title }}
+
+                </h4>
+
+
+
+            </div>
+
+
+
+
+
+
+
+            <!-- Hoofd inhoud -->
+
+
+            <div class="flex-grow-1">
+
+
+                <slot></slot>
+
+
+            </div>
+
+
+
+
+
+
+
+            <!-- Actie knoppen -->
+
+
+            <div
+                v-if="$slots.actions"
+                class="mt-auto pt-4"
+            >
+
+
+                <slot name="actions"></slot>
+
+
+            </div>
+
+
+
+        </div>
 
 
     </div>
-
-
-
-
-
-    <!-- Content -->
-
-    <div class="card-content">
-
-
-        <slot></slot>
-
-
-    </div>
-
-
-
-
-
-
-    <!-- Footer / knoppen -->
-
-    <div
-        v-if="$slots.actions"
-        class="card-actions"
-    >
-
-        <slot name="actions"></slot>
-
-
-    </div>
-
-
-
-</div>
 
 
 </template>
@@ -70,33 +95,24 @@
 
 
 
+
+
 <script setup lang="ts">
 
 
-defineProps({
+defineProps<{
 
-    title:{
-        type:String,
-        default:''
-    },
+    title?:string
 
-
-    icon:{
-        type:String,
-        default:''
-    },
+    icon?:string
 
 
-    clickable:{
-        type:Boolean,
-        default:false
-    }
+}>()
 
-
-})
 
 
 </script>
+
 
 
 
@@ -109,106 +125,73 @@ defineProps({
 .base-card {
 
 
-    background:white;
-
-
     border-radius:18px;
 
 
+    overflow:hidden;
+
+
+    transition:.25s ease;
+
+
+}
+
+
+
+
+
+
+.base-card:hover {
+
+
+    transform:translateY(-6px);
+
+
     box-shadow:
-        0 8px 24px rgba(0,0,0,.08);
+        0 14px 30px rgba(0,0,0,.15) !important;
 
 
-    padding:25px;
+}
 
 
-    height:100%;
+
+
+
+
+
+.card-icon {
+
+
+    width:45px;
+
+
+    height:45px;
+
+
+    border-radius:12px;
 
 
     display:flex;
 
 
-    flex-direction:column;
+    align-items:center;
 
 
-    transition:.25s;
-
-    box-shadow: .25s ease;
+    justify-content:center;
 
 
-}
-
-.base-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 14px 30px rgba(0,0,0,.15);
-}
+    background:#e7f1ff;
 
 
+    color:#0d6efd;
 
 
-
-.clickable {
-
-
-    cursor:pointer;
+    font-size:22px;
 
 
 }
 
 
-
-
-
-.clickable:hover {
-
-
-    transform:translateY(-5px);
-
-
-    box-shadow:
-        0 14px 30px rgba(0,0,0,.15);
-
-
-}
-
-
-
-
-
-.card-header-custom {
-
-
-    margin-bottom:20px;
-
-
-}
-
-
-
-
-
-.card-content {
-
-
-    flex:1;
-
-
-}
-
-
-
-
-
-.card-actions {
-
-
-    margin-top:auto;
-
-
-    padding-top:25px;
-
-
-}
 
 
 

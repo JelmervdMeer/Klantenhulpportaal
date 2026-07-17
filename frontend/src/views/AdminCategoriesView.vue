@@ -13,7 +13,7 @@ interface Category {
 
     name:string
 
-    description:string
+    description?:string
 
 }
 
@@ -91,21 +91,12 @@ function openCreate(){
 
 
 
-function editCategory(category:Category){
+function editCategory(category: Category) {
 
     editingId.value = category.id
 
-
-    form.value = {
-
-        name:category.name,
-
-        description:category.description
-
-    }
-
-
-    showForm.value = true
+    form.value.name = category.name
+    form.value.description = category.description ?? ''
 
 }
 
